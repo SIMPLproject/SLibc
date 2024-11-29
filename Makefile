@@ -1,11 +1,13 @@
-LIB_NAME = SIMPL_libc.a
-SO_NAME = SIMPL_libc.so
-OBJ_DIR = obj
-SRC_DIR = src
-ASM_SRC_DIR = asm_src
-INCLUDE_DIR = include
-TEST_SRC = benchmark.c
-TEST_BIN = benchmark
+LIB_NAME = $(BIN_DIR)/Slibc.a
+SO_NAME = $(BIN_DIR)/Slibc.so
+
+BIN_DIR := bin
+OBJ_DIR := obj
+SRC_DIR := src
+ASM_SRC_DIR := asm_src
+INCLUDE_DIR := include
+TEST_SRC := benchmark.c
+TEST_BIN := benchmark
 
 NASM_FLAGS = -g -F dwarf -I $(INCLUDE_DIR)
 AS = nasm
@@ -21,7 +23,7 @@ PIC_FLAGS = -fPIC
 # Define linker flags and version script
 # CFLAGS += -fvisibility=hidden
 LDFLAGS = -nostartfiles -nodefaultlibs
-LDFLAGS += -Wl,--version-script=Version.v -v
+LDFLAGS += -Wl,--version-script=config/Version.v -v
 
 ifeq ($(TARGET), apple)
 	LDFLAGS += -lc -lSystem
@@ -47,11 +49,14 @@ ASM_OBJ = $(patsubst $(ASM_SRC_DIR)/%.s, $(OBJ_DIR)/%.o, $(ASM_FILES))
 INCLUDE = -I $(INCLUDE_DIR)
 INCLUDE += -I $(SRC_DIR)/config
 
-all: $(OBJ_DIR) $(LIB_NAME) $(SO_NAME)
+all: $(OBJ_DIR) $(BIN_DIR) $(LIB_NAME) $(SO_NAME)
 
 # Create obj directory if it doesn't exist
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
+
+$(BIN_DIR):
+	@mkdir -p $(BIN_DIR)
 
 # Compile .c files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -78,6 +83,8 @@ $(SO_NAME): $(OBJ) $(ASM_OBJ)
 	@$(CC) $(LDFLAGS) $(PIC_FLAGS) $(INCLUDE) -shared -o $@ $(OBJ) $(ASM_OBJ)
 	@strip --strip-all $@
 
+
+
 # Clean object files
 clean:
 	@echo "Removing object files..."
@@ -86,7 +93,7 @@ clean:
 # Full clean of libraries and executables
 fclean: clean
 	@echo "Removing libraries and executables..."
-	@rm -f $(LIB_NAME) $(SO_NAME) $(TEST_BIN)
+	@rm -rf $(BIN_DIR)
 
 # Rebuild all
 re: fclean all
