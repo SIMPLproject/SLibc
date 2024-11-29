@@ -1,37 +1,9 @@
+-include config/*.mk
+
 LIB_NAME = $(BIN_DIR)/Slibc.a
 SO_NAME = $(BIN_DIR)/Slibc.so
 
-BIN_DIR := bin
-OBJ_DIR := obj
-SRC_DIR := src
-ASM_SRC_DIR := asm_src
-INCLUDE_DIR := include
-TEST_SRC := benchmark.c
 TEST_BIN := benchmark
-
-NASM_FLAGS = -g -F dwarf -I $(INCLUDE_DIR)
-AS = nasm
-CC = clang
-AR = ar
-
-# Define compiler and linker flags
-CFLAGS = -O3 -mavx2 -masm=intel -mtune=native
-CFLAGS += -Wall -Wextra -Werror
-CFLAGS += -MMD -MP -m64
-PIC_FLAGS = -fPIC
-
-# Define linker flags and version script
-# CFLAGS += -fvisibility=hidden
-LDFLAGS = -nostartfiles -nodefaultlibs
-LDFLAGS += -Wl,--version-script=config/Version.v -v
-
-ifeq ($(TARGET), apple)
-	LDFLAGS += -lc -lSystem
-	NASM_FLAGS += -f macho64
-else
-	LDFLAGS += -lc
-	NASM_FLAGS += -f elf64
-endif
 
 ifeq ($(VERBOSE), true)
 	CFLAGS += -D VERBOSE
@@ -51,12 +23,6 @@ INCLUDE += -I $(SRC_DIR)/config
 
 all: $(OBJ_DIR) $(BIN_DIR) $(LIB_NAME) $(SO_NAME)
 
-# Create obj directory if it doesn't exist
-$(OBJ_DIR):
-	@mkdir -p $(OBJ_DIR)
-
-$(BIN_DIR):
-	@mkdir -p $(BIN_DIR)
 
 # Compile .c files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -97,5 +63,7 @@ fclean: clean
 
 # Rebuild all
 re: fclean all
+
+-include $(OBJ:.o=.d)
 
 .PHONY: all clean fclean re
