@@ -9,4 +9,8 @@ double exp(double x);
 double pow(double x, double y);
 double fabs(double x);
 
+float sqrt(float x);
+
+int abs(int x);
+
 #endif /* MATH_H */

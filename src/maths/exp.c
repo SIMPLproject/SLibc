@@ -16,5 +16,3 @@ double exp(double x) {
     return sum;
 }
 
-
-
