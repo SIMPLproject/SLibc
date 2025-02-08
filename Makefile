@@ -23,7 +23,6 @@ INCLUDE += -I $(SRC_DIR)/config
 
 all: $(OBJ_DIR) $(BIN_DIR) $(LIB_NAME) $(SO_NAME)
 
-
 # Compile .c files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
@@ -48,8 +47,6 @@ $(SO_NAME): $(OBJ) $(ASM_OBJ)
 	@echo "Building shared library $@..."
 	@$(CC) $(LDFLAGS) $(PIC_FLAGS) $(INCLUDE) -shared -o $@ $(OBJ) $(ASM_OBJ)
 	@strip --strip-all $@
-
-
 
 # Clean object files
 clean:
