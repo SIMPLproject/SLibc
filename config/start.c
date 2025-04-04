@@ -1,14 +1,3 @@
-__attribute__((noreturn)) void exit(int status)
-{
-	(void)status;
-	while(1) {}
-}
-
-
-
-#include <config.h>
-
-
 /* _start is the entry point of this new libc */
 void _start(void) __attribute__((naked));
 
@@ -36,7 +25,6 @@ void _start(void)
 #else
     __asm__ __volatile__
     (
-#ifdef BUILD_EXECUTABLE
         "mov %%rsp, %%rdi\n"          /* Set up arguments for main */
         "lea 8(%%rsp), %%rsi\n"       /* Load argv into rsi */
         "mov %%rsi, %%rdx\n"          /* Move envp to rdx */
@@ -45,23 +33,10 @@ void _start(void)
         "call main\n"                 /* Call main function */
         "mov %%rax, %%rdi\n"          /* Save return value */
         "call exit\n"                 /* Call exit function */
-#else
         "ret\n"                       /* For library, just return */
-#endif
         :
         :
         : "rdi", "rsi", "rdx", "rax"  /* Clobbered registers */
     );
 #endif
-}
-
-
-typedef int (*main_func)(int, char**, char**);
-
-/* __libc_start_main implementation */
-int __libc_start_main(main_func main, int argc, char** argv, char** envp) 
-{
-    int exit_status = main(argc, argv, envp);
-    exit(exit_status);
-    return exit_status;  /* This line will never be reached */
 }

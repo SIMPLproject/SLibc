@@ -1,12 +1,16 @@
 -include config/*.mk
 
 LIB_NAME = $(BIN_DIR)/Slibc.a
-SO_NAME = $(BIN_DIR)/Slibc.so
+SO_NAME = $(BIN_DIR)/Slibc.so.1
 
 TEST_BIN := benchmark
 
 ifeq ($(VERBOSE), true)
 	CFLAGS += -D VERBOSE
+endif
+
+ifeq ($(DEBUG), true)
+	CFLAGS += -g
 endif
 
 # Source files
@@ -48,6 +52,8 @@ $(SO_NAME): $(OBJ) $(ASM_OBJ)
 	@echo "Building shared library $@..."
 	@$(CC) $(LDFLAGS) $(PIC_FLAGS) $(INCLUDE) -shared -o $@ $(OBJ) $(ASM_OBJ)
 	@strip --strip-all $@
+	ln $(SO_NAME) bin/libc.so
+	$(CC) config/start.c -c -o crt1.o
 
 
 

@@ -2,6 +2,7 @@
 #define __STDIO_H__
 
 int printf(const char *format, ...);
+int ft_printf(const char *format, ...);
 
 int putchar(char c);
 

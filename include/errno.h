@@ -2,9 +2,9 @@
 #define __ERRNO_H__
 
 /* need to be change !!!!!!!!!!!!!!!!!! */
-int errno = 0;
+extern int errnono = 0;
 
-int *__get_errno_location(void) { return &errno; }
+int *__get_errno_location(void) { return &errnono; }
 
 #define __set_errno(value) (*__get_errno_location() = value)
 
