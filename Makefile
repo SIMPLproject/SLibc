@@ -53,7 +53,7 @@ $(SO_NAME): $(OBJ) $(ASM_OBJ)
 	@$(CC) $(LDFLAGS) $(PIC_FLAGS) $(INCLUDE) -shared -o $@ $(OBJ) $(ASM_OBJ)
 	@strip --strip-all $@
 	ln $(SO_NAME) bin/libc.so
-	$(CC) config/start.c -c -o crt1.o
+	$(CC) config/start.c -c -o bin/crt1.o
 
 
 
