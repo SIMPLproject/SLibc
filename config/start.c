@@ -1,42 +1,37 @@
 /* _start is the entry point of this new libc */
+/* _start is the entry point */
 void _start(void) __attribute__((naked));
+
+__attribute__((noreturn)) void exit(int status);
 
 void _start(void)
 {
-#ifdef __APPLE__
-    __asm__ __volatile__
-    (
+    __asm__ __volatile__(
 #ifdef BUILD_EXECUTABLE
-        "mov rsp, rdi\n"             /* Set up arguments for main */
-        "lea rsi, [rsp + 8]\n"       /* Load argv into rsi */
-        "mov rdx, rsi\n"             /* Move envp to rdx */
-        "add rdx, 8\n"               /* Adjust envp */
-        "and rsp, -16\n"             /* Align stack pointer to 16 bytes */
-        "call _main\n"               /* Call main function */
-        "mov rdi, rax\n"             /* Save return value */
-        "call _exit\n"               /* Call exit function */
+#ifdef __APPLE__
+        "andq   $-16, %%rsp\n"        /* Align stack first */
+        "mov    %%rsp, %%rdi\n"       /* argc */
+        "lea    8(%%rsp), %%rsi\n"    /* argv */
+        "lea    16(%%rsp), %%rdx\n"   /* envp */
+        "call   _main\n"
+        "mov    %%rax, %%rdi\n"
+        "call   _exit\n"
 #else
-        "ret\n"                      /* For library, just return */
+        "mov %%rsp, %%rbx\n"       // Sauvegarder rsp original
+        "andq $-16, %%rsp\n"       // Aligner la pile
+        "sub $8, %%rsp\n"          // Éviter la red zone (Sécurité)
+        "mov (%%rbx), %%rdi\n"     // argc
+        "lea 8(%%rbx), %%rsi\n"    // argv
+        "lea 16(%%rbx, %%rdi, 8), %%rdx\n" // envp = argv + argc*8 + 16
+        "call main\n"
+        "mov %%rax, %%rdi\n"
+        "call exit\n"
+#endif
+#else
+        "ret\n"
 #endif
         :
         :
-        : "rdi", "rsi", "rdx", "rax"    /* Clobbered registers */
+        : "rbx", "rdi", "rsi", "rdx", "rax", "rsp", "memory"
     );
-#else
-    __asm__ __volatile__
-    (
-        "mov %%rsp, %%rdi\n"          /* Set up arguments for main */
-        "lea 8(%%rsp), %%rsi\n"       /* Load argv into rsi */
-        "mov %%rsi, %%rdx\n"          /* Move envp to rdx */
-        "add $8, %%rdx\n"             /* Adjust envp */
-        "andq $-16, %%rsp\n"          /* Align stack pointer to 16 bytes */
-        "call main\n"                 /* Call main function */
-        "mov %%rax, %%rdi\n"          /* Save return value */
-        "call exit\n"                 /* Call exit function */
-        "ret\n"                       /* For library, just return */
-        :
-        :
-        : "rdi", "rsi", "rdx", "rax"  /* Clobbered registers */
-    );
-#endif
 }

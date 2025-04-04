@@ -39,13 +39,13 @@ long _syscall(long number, ...) {
 	
 #else
 __asm__ volatile (
-    "mov %%rax, %0        \n"
-    "mov %%rdi, %1        \n"
-    "mov %%rsi, %2        \n"
-    "mov %%rdx, %3        \n"
-    "mov %%r10, %4        \n"
-    "mov %%r8, %5         \n"
-    "mov %%r9, %6         \n"
+    "mov rax, %0        \n"
+    "mov rdi, %1        \n"
+    "mov rsi, %2        \n"
+    "mov rdx, %3        \n"
+    "mov r10, %4        \n"
+    "mov r8, %5         \n"
+    "mov r9, %6         \n"
     "syscall              \n"
     : "=r" (ret)
     : "r" (number),

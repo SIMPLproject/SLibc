@@ -15,11 +15,9 @@ endif
 
 # Source files
 SRC = $(shell find $(SRC_DIR) -type f -name '*.c')
-ASM_FILES = $(shell find $(ASM_SRC_DIR) -type f -name '*.s')
 
 # Object files
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
-ASM_OBJ = $(patsubst $(ASM_SRC_DIR)/%.s, $(OBJ_DIR)/%.o, $(ASM_FILES))
 
 # Include directories
 INCLUDE = -I $(INCLUDE_DIR)
@@ -53,7 +51,7 @@ $(SO_NAME): $(OBJ) $(ASM_OBJ)
 	@$(CC) $(LDFLAGS) $(PIC_FLAGS) $(INCLUDE) -shared -o $@ $(OBJ) $(ASM_OBJ)
 	@strip --strip-all $@
 	ln $(SO_NAME) bin/libc.so
-	$(CC) config/start.c -c -o bin/crt1.o
+	$(CC) -fno-pie -no-pie -nostdlib -DBUILD_EXECUTABLE config/start.c -c -o bin/crt1.o
 
 
 
