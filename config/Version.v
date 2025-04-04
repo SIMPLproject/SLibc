@@ -3,6 +3,7 @@ SIMPL_0.1 {
 		strlen;
 		strcmp;
 		strncmp;
+		exit;
 
 		memset;
 		memcpy;
