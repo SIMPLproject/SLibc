@@ -1,0 +1,3 @@
+[submodule "SIMPLV"]
+	path = SIMPLV
+	url = git@github.com:SIMPLproject/SIMPLV.git
