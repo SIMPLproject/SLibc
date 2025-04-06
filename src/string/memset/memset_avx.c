@@ -17,7 +17,7 @@
 
 
 #define REP_STOSB_THRESHOLD 2048
-#define UNROLL_SIZE 64
+#define UNROLL_SIZE 96
 #define VEC_SIZE 32
 
 void *_memset_avx(void* dest, int c, size_t n) {
@@ -47,21 +47,20 @@ void *_memset_avx(void* dest, int c, size_t n) {
         );
     } else {
         __m256i vec = _mm256_set1_epi8(value);
-        size_t vec_count = n / VEC_SIZE;
-        size_t remainder = n & VEC_SIZE - 1;
-		_mm_prefetch((const char*)d + UNROLL_SIZE, _MM_HINT_T0);
-        for (size_t i = 0; i < vec_count; i++) {
+        size_t unroll_count = n / UNROLL_SIZE;
+        size_t remainder = n % UNROLL_SIZE;
+        _mm_prefetch((const char*)d + UNROLL_SIZE, _MM_HINT_T0);
+        for (size_t i = 0; i < unroll_count; i++) {
             _mm256_storeu_si256((__m256i*)d, vec);
-			_mm256_storeu_si256((__m256i*)(d + 32), vec);
-			_mm256_storeu_si256((__m256i*)(d + 64), vec);
+            _mm256_storeu_si256((__m256i*)(d + 32), vec);
+            _mm256_storeu_si256((__m256i*)(d + 64), vec);
             d += UNROLL_SIZE;
         }
-
         for (size_t i = 0; i < remainder; i++) {
             d[i] = value;
         }
     }
-	_mm256_zeroupper();
+    _mm256_zeroupper();
     return dest;
 }
 
