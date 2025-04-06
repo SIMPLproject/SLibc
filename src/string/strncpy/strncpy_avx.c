@@ -9,8 +9,7 @@
 * The function is optimized for large strings and strings with a length multiple of 32.
 */
 
-#include <stdlib.h>
-#include <stdint.h>
+#include "SIMPLV/includes/simpl.h"
 #include <config.h>
 #include <immintrin.h>
 
@@ -19,7 +18,7 @@ char *_strncpy_avx(char *dst, const char *src, size_t n)
 {
     char *origin = dst;
     size_t i = 0;
-    const __m256i zero = _mm256_setzero_si256();
+    const vec zero = v256b_setzero();
 
     uintptr_t align = (uintptr_t)src & (VEC_SIZE - 1);
     if (align != 0)
@@ -40,9 +39,9 @@ char *_strncpy_avx(char *dst, const char *src, size_t n)
 
     while (i + VEC_SIZE <= n)
     {
-        __m256i chunk = _mm256_loadu_si256((const __m256i *)(src + i));
-        __m256i cmp = _mm256_cmpeq_epi8(chunk, zero);
-        int mask = _mm256_movemask_epi8(cmp);
+        vec chunk = v256b_loadu((const uvec *)(src + i));
+        vec cmp = v32c_cmpeq(chunk, zero);
+        int mask = v32c_movemask(cmp);
 
         if (mask != 0)
         {
@@ -54,7 +53,7 @@ char *_strncpy_avx(char *dst, const char *src, size_t n)
             return origin;
         }
 
-        _mm256_storeu_si256((__m256i *)(dst + i), chunk);
+		v256b_storeu((uvec *)(dst + i), chunk); 
         i += VEC_SIZE;
     }
 
@@ -65,9 +64,9 @@ char *_strncpy_avx(char *dst, const char *src, size_t n)
         for (size_t j = 0; j < remaining; j++)
             tmp[j] = src[i + j];
 
-        __m256i chunk = _mm256_loadu_si256((const __m256i *)tmp);
-        __m256i cmp = _mm256_cmpeq_epi8(chunk, zero);
-        int mask = _mm256_movemask_epi8(cmp);
+        vec chunk = v256b_loadu((const uvec *)tmp);
+        vec cmp = v32c_cmpeq(chunk, zero);
+        int mask = v32c_movemask(cmp);
 
         if (mask != 0)
         {

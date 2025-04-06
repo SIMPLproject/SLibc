@@ -11,22 +11,23 @@
 	* The function is optimized for large strings and strings with a length multiple of 32.
 */
 
+#include "SIMPLV/includes/simpl.h"
 #include <stdint.h>
 #include <immintrin.h>
+#include <config.h>
 
 int _strncmp_avx(const char *s1, const char *s2, size_t n)
-{	
-	if (__builtin_expect(n == 0, 0) || __builtin_expect(s1 == s2, 0))
-		return 0;
+{
+    if (__builtin_expect(n == 0, 0) || __builtin_expect(s1 == s2, 0))
+        return 0;
 
-    const char		*ptr1 = s1;
-    const char		*ptr2 = s2;
-    size_t			chunks = n >> 5;
-	uintptr_t		align1 = (uintptr_t)ptr1 & 31;
-	uintptr_t		align2 = (uintptr_t)ptr2 & 31;
-
-
-    if (align1 || align2)
+    const char *ptr1 = s1;
+    const char *ptr2 = s2;
+    
+    uintptr_t align1 = (uintptr_t)ptr1 & 31;
+    uintptr_t align2 = (uintptr_t)ptr2 & 31;
+    
+    if (align1 != align2)
     {
         while (n && ((uintptr_t)ptr1 & 31) && ((uintptr_t)ptr2 & 31))
         {
@@ -36,37 +37,35 @@ int _strncmp_avx(const char *s1, const char *s2, size_t n)
             ptr2++;
             n--;
         }
-        chunks = n >> 5;
     }
 
+    size_t chunks = n >> 5;
     while (chunks--)
     {
-        __m256i v1 = _mm256_loadu_si256((const __m256i *)ptr1);
-        __m256i v2 = _mm256_loadu_si256((const __m256i *)ptr2);
-        __m256i cmp = _mm256_cmpeq_epi8(v1, v2);
-        int mask = _mm256_movemask_epi8(cmp);
-
-        if (mask != -1)
+        vec v1 = v256b_loadu((const uvec *)ptr1);
+        vec v2 = v256b_loadu((const uvec *)ptr2);
+        
+        vec cmp = v32c_cmpeq(v1, v2);
+        unsigned mask = (unsigned)v32c_movemask(cmp);
+        
+        if (mask != 0xFFFFFFFF)
         {
-            for (int i = 0; i < 32; i++)
-            {
-                if (ptr1[i] != ptr2[i])
-                    return (unsigned char)ptr1[i] - (unsigned char)ptr2[i];
-            }
+            unsigned diff_pos = (unsigned)__builtin_ctz(~mask);
+            return (unsigned char)ptr1[diff_pos] - (unsigned char)ptr2[diff_pos];
         }
+        
         ptr1 += 32;
         ptr2 += 32;
-        n -= 32;
     }
 
-	n &= 31;
-	while (n--)
-	{
-		if (*ptr1 != *ptr2)
-			return (unsigned char)*ptr1 - (unsigned char)*ptr2;
-		ptr1++;
-		ptr2++;
-	}
-	return 0;
-
+    n &= 31;
+    while (n--)
+    {
+        if (*ptr1 != *ptr2)
+            return (unsigned char)*ptr1 - (unsigned char)*ptr2;
+        ptr1++;
+        ptr2++;
+    }
+    
+    return 0;
 }

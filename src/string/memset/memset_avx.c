@@ -60,7 +60,6 @@ void *_memset_avx(void* dest, int c, size_t n) {
             d[i] = value;
         }
     }
-    _mm256_zeroupper();
     return dest;
 }
 

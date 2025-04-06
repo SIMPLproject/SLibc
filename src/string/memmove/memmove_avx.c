@@ -15,16 +15,18 @@
  * The function uses prefetching to improve performance.
 */
 
-void *_memmove_avx(void *dest, const void *src, size_t len) {
+void *_memmove_avx(void *dest, const void *src, size_t len) 
+{
     if (len == 0 || dest == src)
         return dest;
 
     uint8_t *cdest = (uint8_t *)dest;
     const uint8_t *csrc = (const uint8_t *)src;
 
-    if (cdest < csrc) {
-        size_t num_blocks = len / 32;
-        size_t remaining_bytes = len % 32;
+    if (cdest < csrc) 
+	{
+        size_t num_blocks = len >> 5;
+        size_t remaining_bytes = len & 31;
 
         const __m256i *s = (const __m256i *)csrc;
         __m256i *d = (__m256i *)cdest;
@@ -37,13 +39,14 @@ void *_memmove_avx(void *dest, const void *src, size_t len) {
         for (size_t i = 0; i < remaining_bytes; ++i) 
             byte_dest[i] = byte_src[i];
     } else {
-        size_t num_blocks = len / 32;
-        size_t remaining_bytes = len % 32;
+        size_t num_blocks = len >> 5;
+        size_t remaining_bytes = len & 31;
 
         const __m256i *s = (const __m256i *)(csrc + len);
         __m256i *d = (__m256i *)(cdest + len);
 
-        if (remaining_bytes) {
+        if (remaining_bytes) 
+		{
             const uint8_t *byte_src = csrc + len;
             uint8_t *byte_dest = cdest + len;
             for (size_t i = 0; i < remaining_bytes; ++i)
@@ -52,7 +55,8 @@ void *_memmove_avx(void *dest, const void *src, size_t len) {
             d = (__m256i *)(cdest + len - remaining_bytes);
         }
 
-        for (size_t i = 0; i < num_blocks; ++i) {
+        for (size_t i = 0; i < num_blocks; ++i) 
+		{
             d--;
             s--;
             _mm256_storeu_si256(d, _mm256_loadu_si256(s));

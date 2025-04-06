@@ -9,42 +9,56 @@
  * The function is optimized for large strings and strings with a length multiple of 32.
 */
 
+#include "SIMPLV/includes/simpl.h"
 #include <stdint.h>
 #include <immintrin.h>
 #include <stdlib.h>
 #include <config.h>
 
-char *ft_strchr(const char *p, int ch)
+
+
+char *_strchr_avx(const char *p, int ch)
 {
-	if (__builtin_expect(p == NULL, 0))
-		return (NULL);
+    if (__builtin_expect(p == NULL, 0))
+        return NULL;
 
-	const unsigned char		*ptr = (const unsigned char *)p;
-	const unsigned char		c = (unsigned char)ch;
-	size_t					offset = (uintptr_t)ptr & 31;
+    const unsigned char *ptr = (const unsigned char *)p;
+    const unsigned char c = (unsigned char)ch;
+    const size_t offset = (uintptr_t)ptr & (VEC_SIZE - 1);
 
-	if (offset)
-	{
-		size_t align_size = VEC_SIZE - offset;
-		for (size_t i = 0; i < align_size; i++)
-		{
-			if (ptr[i] == c)
-				return (char *)(ptr + i);
-			if (ptr[i] == '\0')
-				return NULL;
-		}
-		ptr += align_size;
-	}
+    if (__builtin_expect(offset != 0, 0))
+    {
+        const size_t align_size = VEC_SIZE - offset;
+        for (size_t i = 0; i < align_size; i++)
+        {
+            unsigned char current = ptr[i];
+            if (__builtin_expect(current == c, 1))
+                return (char *)(ptr + i);
+            if (__builtin_expect(current == '\0', 0))
+                return NULL;
+        }
+        ptr += align_size;
+    }
 
-	const __m256i		v = _mm256_set1_epi8(c);
-	while (1)
-	{
-		__m256i data = _mm256_loadu_si256((const __m256i *)ptr);
-		__m256i cmp = _mm256_cmpeq_epi8(data, v);
-		int mask = _mm256_movemask_epi8(cmp);
-		if (mask != 0)
-			return (char *)(ptr + __builtin_ctz(mask));
-		ptr += VEC_SIZE;
-		_mm_prefetch(ptr, _MM_HINT_T0);
-	}
+    const vec needle = v256b_set1_char(c);
+    const vec zero   = v256b_setzero();
+    unsigned char_mask, null_mask;
+
+    while (1)
+    {
+        vec data      = v256b_loadu((const uvec *)ptr);
+        vec cmp_char  = v32c_cmpeq(data, needle);
+        char_mask     = (unsigned)v32c_movemask(cmp_char);
+        if (char_mask != 0)
+            return (char *)(ptr + __builtin_ctz(char_mask));
+
+        vec cmp_zero  = v32c_cmpeq(data, zero);
+        null_mask     = (unsigned)v32c_movemask(cmp_zero);
+        if (__builtin_expect(null_mask != 0, 0))
+            return NULL;
+
+        ptr += VEC_SIZE;
+        _mm_prefetch((const char *)(ptr + VEC_SIZE), _MM_HINT_T0);
+    }
 }
+

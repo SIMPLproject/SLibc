@@ -18,18 +18,19 @@ __builtin_ctz() is a builtin function that returns the number of trailing 0-bits
 #include <immintrin.h>
 #include <stdlib.h>
 
+
 size_t _strlen_avx(const char *str)
 {
     const char *original_ptr = str;
-    __m256i     ymm_zero = _mm256_set1_epi8(0);
+    vec ymm_zero = v256b_setzero(); 
 
     uintptr_t misalignment = (uintptr_t)str & 31;
     if (misalignment != 0)
     {
         size_t  offset = 32 - misalignment;
-        __m256i ymm_data = _mm256_loadu_si256((__m256i *)str);
-        __m256i cmp_result = _mm256_cmpeq_epi8(ymm_zero, ymm_data);
-        int32_t mask = _mm256_movemask_epi8(cmp_result);
+        vec ymm_data = v256b_loadu((const uvec *)str);
+        vec cmp_result = v32c_cmpeq(ymm_zero, ymm_data);
+        int32_t mask = v32c_movemask(cmp_result);
 
         mask >>= misalignment;
 
@@ -45,9 +46,9 @@ size_t _strlen_avx(const char *str)
     while (1)
     {
         _mm_prefetch(str + 32, _MM_HINT_T0);
-        __m256i ymm_data = _mm256_load_si256((__m256i *)str);
-        __m256i cmp_result = _mm256_cmpeq_epi8(ymm_zero, ymm_data);
-        int32_t mask = _mm256_movemask_epi8(cmp_result);
+        vec ymm_data = v256b_loadu((const uvec *)str);
+        vec cmp_result = v32c_cmpeq(ymm_zero, ymm_data);
+        int32_t mask = v32c_movemask(cmp_result);
 
         if (mask != 0)
         {

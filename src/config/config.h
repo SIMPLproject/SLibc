@@ -2,6 +2,7 @@
 #define __CONFIG_H__
 
 #include "func_ifunc_selector.h"
+#include "../../SIMPLV/includes/simpl.h"
 
 #if defined(__APPLE__)
 #define simpl_weak_alias(func, func_source) \
