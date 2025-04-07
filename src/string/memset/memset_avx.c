@@ -46,14 +46,14 @@ void *_memset_avx(void* dest, int c, size_t n) {
             : "memory"
         );
     } else {
-        __m256i vec = _mm256_set1_epi8(value);
+        vec vec = v256b_set1_char(value);
         size_t unroll_count = n / UNROLL_SIZE;
         size_t remainder = n % UNROLL_SIZE;
         _mm_prefetch((const char*)d + UNROLL_SIZE, _MM_HINT_T0);
         for (size_t i = 0; i < unroll_count; i++) {
-            _mm256_storeu_si256((__m256i*)d, vec);
-            _mm256_storeu_si256((__m256i*)(d + 32), vec);
-            _mm256_storeu_si256((__m256i*)(d + 64), vec);
+            v256b_storeu((uvec*)d, vec);
+            v256b_storeu((uvec*)(d + 32), vec);
+            v256b_storeu((uvec*)(d + 64), vec);
             d += UNROLL_SIZE;
         }
         for (size_t i = 0; i < remainder; i++) {

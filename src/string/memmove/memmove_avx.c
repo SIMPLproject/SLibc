@@ -28,11 +28,11 @@ void *_memmove_avx(void *dest, const void *src, size_t len)
         size_t num_blocks = len >> 5;
         size_t remaining_bytes = len & 31;
 
-        const __m256i *s = (const __m256i *)csrc;
-        __m256i *d = (__m256i *)cdest;
+        const uvec *s = (const uvec *)csrc;
+        uvec *d = (uvec *)cdest;
 		
         for (size_t i = 0; i < num_blocks; ++i)
-            _mm256_storeu_si256(d++, _mm256_loadu_si256(s++));
+            v256b_storeu(d++, v256b_loadu(s++));
 
         uint8_t *byte_dest = (uint8_t *)d;
         const uint8_t *byte_src = (const uint8_t *)s;
@@ -42,8 +42,8 @@ void *_memmove_avx(void *dest, const void *src, size_t len)
         size_t num_blocks = len >> 5;
         size_t remaining_bytes = len & 31;
 
-        const __m256i *s = (const __m256i *)(csrc + len);
-        __m256i *d = (__m256i *)(cdest + len);
+        const uvec *s = (const uvec *)(csrc + len);
+        uvec *d = (uvec *)(cdest + len);
 
         if (remaining_bytes) 
 		{
@@ -51,15 +51,15 @@ void *_memmove_avx(void *dest, const void *src, size_t len)
             uint8_t *byte_dest = cdest + len;
             for (size_t i = 0; i < remaining_bytes; ++i)
                 byte_dest[-(int)(i + 1)] = byte_src[-(int)(i + 1)];
-            s = (const __m256i *)(csrc + len - remaining_bytes);
-            d = (__m256i *)(cdest + len - remaining_bytes);
+            s = (const uvec *)(csrc + len - remaining_bytes);
+            d = (uvec *)(cdest + len - remaining_bytes);
         }
 
         for (size_t i = 0; i < num_blocks; ++i) 
 		{
             d--;
             s--;
-            _mm256_storeu_si256(d, _mm256_loadu_si256(s));
+            v256b_storeu(d, v256b_loadu(s));
         }
     }
 
