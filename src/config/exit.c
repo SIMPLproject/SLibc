@@ -1,6 +1,6 @@
+#include <unistd.h>
 
 __attribute__((noreturn)) void exit(int status)
 {
-	(void)status;
-	while(1) {}
+	_exit(status);	
 }

@@ -1,6 +1,11 @@
 # Compile without the entire glibc pipeline
 
 ```
+working : 
+clang -nostartfiles bin/crt1.o -Lbin -lc -Iinclude test/test.c -o a.out -Wl,-rpath=$PWD/bin -g
+```
+
+```
 clang -nostdlib -nostartfiles bin/crt1.o -Lbin -Wl,-Bstatic -lc -Iinclude test/test.c -o a.out
 ```
 

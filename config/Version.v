@@ -8,7 +8,8 @@ SIMPL_0.1 {
 		memset;
 		memcpy;
 		memmove;
-
+		strchr;
+		strncpy;
 
 		malloc;
 		free;

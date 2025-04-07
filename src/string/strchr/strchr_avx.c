@@ -15,8 +15,6 @@
 #include <stdlib.h>
 #include <config.h>
 
-
-
 char *_strchr_avx(const char *p, int ch)
 {
     if (__builtin_expect(p == NULL, 0))

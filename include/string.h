@@ -27,4 +27,6 @@ void *memset (void *__s, int __c, size_t __n) __nonnull (1);
 
 void *memcpy (void *__d, const void *__s, size_t __n) __nonnull (1, 2);
 
+char *strncpy (char *__d, const char *__s, size_t __n) __nonnull (1, 2);
+
 #endif // __STRING_H__

@@ -6,7 +6,7 @@
 #define VEC_SIZE 32
 
 
-int strcmp_avx(const char *s1, const char *s2) 
+int _strcmp_avx(const char *s1, const char *s2) 
 {
 	if (__builtin_expect(s1 == s2, 1))
 		return 0;
