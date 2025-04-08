@@ -13,24 +13,6 @@
 # ─────────────────────────────────────────────────────────────
 FUNC_LIST=$(shell find . -maxdepth 1 -mindepth 1 -type d -printf "%f ")
 
-ARCHIVE_NAME = $(BUILD_FOLDER)/string.a
-
-
-
-
-# to rm need to depend on other folder
-BUILD_FOLDER = /tmp/test
-CC = clang
-CFLAGS = -Wall -Wextra -O3
-DISABLE_VECTORISE = -fno-tree-vectorize -fno-builtin -mno-sse -mno-avx
-# use full flags here for consistency
-VERSION_FLAGS = sse4 avx2
-BASE_INCLUDE = -I../../../../include
-CONFIG_INCLUDE = -I../../../config
-
-
-
-
 # Build per-function static archives
 FUNC_ARCHIVES := $(foreach func, $(FUNC_LIST), $(BUILD_FOLDER)/$(func)/$(func).a)
 
@@ -39,10 +21,10 @@ FUNC_ARCHIVES := $(foreach func, $(FUNC_LIST), $(BUILD_FOLDER)/$(func)/$(func).a
 # Final combined archive
 $(ARCHIVE_NAME): $(FUNC_ARCHIVES)
 	@echo "Packing final archive: $@"
-	@rm -f $@
-	@for archive in $^; do ar x $$archive; done
-	@ar rcs $@ *.o
-	@rm -f *.o
+	rm -f $@
+	for archive in $^; do ar x $$archive; done
+	ar rcs $@ *.o
+	rm *.o
 
 # Archive rule per function
 define GEN_FUNC_ARCHIVE

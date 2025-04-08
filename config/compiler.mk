@@ -1,6 +1,7 @@
 CC = clang
+AR = ar
 # Define compiler and linker flags
-CFLAGS = -O3 -mavx2 -masm=intel -mtune=native
+CFLAGS = -O3
 CFLAGS += -Wall -Wextra -Werror
 CFLAGS += -MMD -MP -m64
 PIC_FLAGS = -fPIC
@@ -15,6 +16,3 @@ endif
 
 AS = nasm
 NASM_FLAGS = -g -F dwarf -I $(INCLUDE_DIR)
-
-AR = ar
-

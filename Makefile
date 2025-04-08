@@ -48,7 +48,7 @@ $(LIB_NAME): $(OBJ) $(ASM_OBJ)
 # Build shared library with version script
 $(SO_NAME): $(OBJ) $(ASM_OBJ)
 	@echo "Building shared library $@..."
-	@$(CC) $(LDFLAGS) $(PIC_FLAGS) $(INCLUDE) -shared -o $@ $(OBJ) $(ASM_OBJ)
+	ld -nostdlib -shared -soname Slibc.so.1 -o $@ $(OBJ) $(ASM_OBJ)
 	# @strip --strip-all $@
 	ln $(SO_NAME) bin/libc.so
 	$(CC) -fno-pie -no-pie -nostdlib -DBUILD_EXECUTABLE config/start.c -c -o bin/crt1.o

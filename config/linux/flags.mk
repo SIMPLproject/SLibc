@@ -1,2 +1,2 @@
-LDFLAGS += -lc
+# LDFLAGS += -lc
 NASM_FLAGS += -f elf64

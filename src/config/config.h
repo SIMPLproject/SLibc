@@ -2,7 +2,6 @@
 #define __CONFIG_H__
 
 #include "func_ifunc_selector.h"
-#include "../../SIMPLV/includes/simpl.h"
 
 #if defined(__APPLE__)
 #define simpl_weak_alias(func, func_source) \
@@ -14,6 +13,17 @@
 #define simpl_weak_alias(name, func)                                           \
   _Pragma("GCC error \"Weak alias is not supported on this compiler\"")
 #endif
+
+#if defined(__AVX__) || defined(__AVX2__)
+  #define ARCH_SYM(x) _##x##_avx
+#elif defined(__SSE2__) || defined(__SSE3__) || defined(__SSSE3__) || defined(__SSE4_1__) || defined(__SSE4_2__)
+  #define ARCH_SYM(x) _##x##_sse
+#elif defined(__SSE__)
+  #define ARCH_SYM(x) _##x##_sse
+#else
+  #define ARCH_SYM(x) _##x##_default
+#endif
+
 
 #define AVX2_ALIGNMENT 32
 #define AVX2_SIZE 32
