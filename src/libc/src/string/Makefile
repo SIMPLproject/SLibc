@@ -11,13 +11,15 @@
 #   - foo_template.c   → Optimized version, compiled multiple times
 #                        depending on the target CPU architecture
 # ─────────────────────────────────────────────────────────────
-FUNC_LIST=strlen #$(shell find . -maxdepth 1 -mindepth 1 -type d -printf "%f ")
+FUNC_LIST=$(shell find . -maxdepth 1 -mindepth 1 -type d -printf "%f ")
 
-ARCHIVE_NAME = string.a
+ARCHIVE_NAME = $(BUILD_FOLDER)/string.a
 
-# to rm
 
-BUILD_FOLDER = test
+
+
+# to rm need to depend on other folder
+BUILD_FOLDER = /tmp/test
 CC = clang
 CFLAGS = -Wall -Wextra -O3
 DISABLE_VECTORISE = -fno-tree-vectorize -fno-builtin -mno-sse -mno-avx

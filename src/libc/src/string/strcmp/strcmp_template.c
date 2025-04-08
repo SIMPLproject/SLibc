@@ -1,12 +1,11 @@
-#include "SIMPLV/includes/simpl.h"
+#include <simplv.h>
 #include <stdint.h>
 #include <config.h>
-#include <immintrin.h>
 
 #define VEC_SIZE 32
 
 
-int _strcmp_avx(const char *s1, const char *s2) 
+int ARCH_SYM(strcmp)(const char *s1, const char *s2) 
 {
 	if (__builtin_expect(s1 == s2, 1))
 		return 0;

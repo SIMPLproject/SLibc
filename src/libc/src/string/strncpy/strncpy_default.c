@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stddef.h>
 
-char *_strncpy_base(char *dest, const char *src, size_t n) {
+char *_strncpy_default(char *dest, const char *src, size_t n) {
 	if (!dest || !src) return NULL;
 	char *d = dest;
 	const char *s = src;

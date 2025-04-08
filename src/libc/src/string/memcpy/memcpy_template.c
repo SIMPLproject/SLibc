@@ -1,7 +1,8 @@
 #include <stdint.h>
-#include <immintrin.h>
 #include <stdlib.h>
 #include <config.h>
+#include <simplv.h>
+#include <immintrin.h>
 
 /*
  *  this implementation of the memcpy function using AVX2 instructions
@@ -23,7 +24,7 @@
 
 
 
-void *_memcpy_avx(void *dest, const void *src, size_t len) {
+void *ARCH_SYM(memcpy)(void *dest, const void *src, size_t len) {
     if (len == 0 || dest == src) {
         return dest;
     }

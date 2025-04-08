@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-void	*_memset_base(void *s, int c, size_t n)
+void	*_memset_default(void *s, int c, size_t n)
 {
 	uint8_t	*ptr;
 

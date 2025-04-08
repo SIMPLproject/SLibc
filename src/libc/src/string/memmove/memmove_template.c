@@ -1,7 +1,7 @@
 #include <stdint.h>
-#include <immintrin.h>
 #include <stdlib.h>
 #include <config.h>
+#include <simplv.h>
 
 /*
  * this implementation of the memmove function uses AVX2 
@@ -15,7 +15,7 @@
  * The function uses prefetching to improve performance.
 */
 
-void *_memmove_avx(void *dest, const void *src, size_t len) 
+void *ARCH_SYM(memmove)(void *dest, const void *src, size_t len) 
 {
     if (len == 0 || dest == src)
         return dest;

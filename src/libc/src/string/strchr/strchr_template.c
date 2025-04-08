@@ -9,13 +9,13 @@
  * The function is optimized for large strings and strings with a length multiple of 32.
 */
 
-#include "SIMPLV/includes/simpl.h"
+#include <simplv.h>
 #include <stdint.h>
 #include <immintrin.h>
 #include <stdlib.h>
 #include <config.h>
 
-char *_strchr_avx(const char *p, int ch)
+char *ARCH_SYM(strchr)(const char *p, int ch)
 {
     if (__builtin_expect(p == NULL, 0))
         return NULL;

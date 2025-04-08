@@ -11,16 +11,15 @@
 */
 
 #include <stdint.h>
-#include <immintrin.h>
 #include <config.h>
-
-
+#include <immintrin.h>
+#include <simplv.h>
 
 #define REP_STOSB_THRESHOLD 2048
 #define UNROLL_SIZE 96
 #define VEC_SIZE 32
 
-void *_memset_avx(void* dest, int c, size_t n) {
+void *ARCH_SYM(memset)(void* dest, int c, size_t n) {
     unsigned char* d = (unsigned char*)dest;
     uint8_t value = (uint8_t)c;
 

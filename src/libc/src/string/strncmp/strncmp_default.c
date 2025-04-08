@@ -1,6 +1,6 @@
 #include "stdint.h"
 
-int	_strncmp_base(const char *first, const char *second, size_t length)
+int	_strncmp_default(const char *first, const char *second, size_t length)
 {
 	size_t	i;
 

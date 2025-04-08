@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-void	*_memmove_base(void *dest, const void *source, size_t n)
+void	*_memmove_default(void *dest, const void *source, size_t n)
 {
 	unsigned char	*src;
 	unsigned char	*dst;

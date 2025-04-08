@@ -9,12 +9,11 @@
 * The function is optimized for large strings and strings with a length multiple of 32.
 */
 
-#include "SIMPLV/includes/simpl.h"
+#include <simplv.h>
 #include <config.h>
-#include <immintrin.h>
 
 
-char *_strncpy_avx(char *dst, const char *src, size_t n)
+char *ARCH_SYM(strncpy)(char *dst, const char *src, size_t n)
 {
     char *origin = dst;
     size_t i = 0;

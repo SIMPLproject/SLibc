@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void	*_memcpy_base(void *destination, const void *source, size_t num)
+void	*_memcpy_default(void *destination, const void *source, size_t num)
 {
 	unsigned char	*src;
 	unsigned char	*dest;
