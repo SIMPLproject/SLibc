@@ -1,6 +1,6 @@
 SYSTEM=linux
 ARCH=x86_64
-BUILD_FOLDER=/tmp/oui
+BUILD_FOLDER=$(shell realpath bin)
 
 MK_CONFIG=$(shell realpath config/)
 -include $(MK_CONFIG)/*.mk
@@ -17,7 +17,7 @@ VERSION_FLAGS := sse4 avx2
 
 
 CONFIG_INCLUDE := -I $(shell realpath lib/config)
-BASE_INCLUDE := -I $(BUILD_INCLUDE_FOLDER)
+BASE_INCLUDE := -I $(shell realpath $(BUILD_INCLUDE_FOLDER))
 
 export CC
 export AR
@@ -59,7 +59,7 @@ libs: init_build include
 	done
 
 
-CRT_CFLAGS = -fno-pie -no-pie -nostdlib
+CRT_CFLAGS = -fno-pie -nostdlib
 $(BUILD_LIB_FOLDER)/crt1.o : crt/$(SYSTEM)/$(ARCH)/crt1.c
 	$(CC) $(CRT_CFLAGS) -c $< -o $@
 
