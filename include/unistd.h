@@ -1,10 +1,15 @@
 #ifndef __UNISTD_H__
 #define __UNISTD_H__
 
-long _syscall(long number, ...);
+typedef long int          ssize_t;
+typedef unsigned long int size_t;
 
-void _exit(int status);
+long syscall(long number, ...);
 
-int write(int fildes, const void *buf, unsigned int nbyte);
+void exit(int status);
+
+ssize_t write(int fildes, const void *buf, size_t nbyte);
+
+ssize_t read(int fd, void *buf, size_t count);
 
 #endif // __UNISTD_H__

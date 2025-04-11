@@ -6,7 +6,7 @@
 /*   By: babonnet <babonnet@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:39:57 by babonnet          #+#    #+#             */
-/*   Updated: 2024/10/18 19:11:06 by bonsthie         ###   ########.fr       */
+/*   Updated: 2025/04/11 19:30:11 by babonnet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,6 @@ int ft_printf(const char *format, ...)
 }
 
 simpl_weak_alias(printf, ft_printf)
+simpl_weak_alias(__printf_chk, ft_printf)
+
 

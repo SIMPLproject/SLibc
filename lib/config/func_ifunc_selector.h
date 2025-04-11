@@ -24,7 +24,6 @@ enum ifunc_type_u {
     }
 
 #define __ifunc_create_prototype(name, type_name, ...)                                             \
-    type_name name##_erms(__VA_ARGS__);                                                            \
     type_name name##_avx(__VA_ARGS__);                                                             \
     type_name name##_sse(__VA_ARGS__);                                                             \
     type_name name##_default(__VA_ARGS__);
@@ -33,10 +32,6 @@ enum ifunc_type_u {
     type_name (*name##_ifunc())(__VA_ARGS__)                                                       \
     {                                                                                              \
         uint8_t version = _version;                                                                \
-        if ((version & IFUNC_ERMS) && simd_support.erms)                                           \
-        {                                                                                          \
-            _func_selected(name##_erms)                                                            \
-        }                                                                                          \
         if ((version & IFUNC_AVX) && simd_support.avx)                                             \
         {                                                                                          \
             _func_selected(name##_avx)                                                             \

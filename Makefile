@@ -11,7 +11,7 @@ export MK_CONFIG
 CC := clang
 AR = ar
 AR_FLAGS = 
-CFLAGS := -Wall -Wextra -O3 -MMD -MP -fPIC
+CFLAGS := -Wall -Wextra -O3 -MMD -MP -fPIC -g
 DISABLE_VECTORISE := -fno-tree-vectorize -fno-builtin -mno-sse -mno-avx
 VERSION_FLAGS := sse4 avx2
 
@@ -37,7 +37,7 @@ LIBS_SRC = $(addprefix lib/,$(LIBS))
 SYSDEPS_BITS = $(shell find $(LIBS_SRC) -type d -wholename '*/sysdeps/$(SYSTEM)/$(ARCH)/bits')
 $(info $(SYSDEPS_BITS))
 
-all : init_build include crt libs
+all : init_build include crt libs custom_clang
 
 init_build: 
 	mkdir -p $(BUILD_FOLDER)
@@ -71,6 +71,15 @@ $(BUILD_LIB_FOLDER)/crtn.o : crt/$(SYSTEM)/$(ARCH)/crtn.c
 	$(CC) $(CRT_CFLAGS) -c $< -o $@
 
 crt:  include $(BUILD_LIB_FOLDER)/crt1.o  $(BUILD_LIB_FOLDER)/crti.o  $(BUILD_LIB_FOLDER)/crtn.o 
+
+ PATH := $(BUILD_FOLDER):$(PATH)
+
+custom_clang : init_build
+	
+	cp config/sclang $(BUILD_FOLDER)/sclang
+	echo "export PATH=$(BUILD_FOLDER):$$PATH" > $(BUILD_FOLDER)/clang_path
+	echo "export SLIBC_PATH=$(BUILD_FOLDER)" >> $(BUILD_FOLDER)/clang_path
+	chmod +x $(BUILD_FOLDER)/clang_path
 
 clean:
 	rm -rf $(BUILD_OBJ_FOLDER)

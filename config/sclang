@@ -1,0 +1,9 @@
+#!/bin/sh
+
+clang -nostdlib -nostartfiles \
+		  $SLIBC_PATH/lib/crt1.o \
+		  $SLIBC_PATH/lib/crti.o \
+		  $SLIBC_PATH/lib/crtn.o \
+		  "$@" \
+		  -L$SLIBC_PATH/lib \
+		  -Wl,-Bdynamic -lc -o a.out -g

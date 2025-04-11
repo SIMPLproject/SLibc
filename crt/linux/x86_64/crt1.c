@@ -2,7 +2,7 @@
 /* _start is the entry point */
 void _start(void) __attribute__((naked));
 
-__attribute__((noreturn)) void exit(int status);
+#include <unistd.h>
 
 void _start(void)
 {

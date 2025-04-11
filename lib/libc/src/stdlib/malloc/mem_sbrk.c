@@ -14,7 +14,7 @@ void* _sbrk(intptr_t increment) {
     void* result;
 
     if (current_brk == 0) {
-        result = (void*)_syscall(SYS_brk, 0);
+        result = (void*)syscall(SYS_brk, 0);
         current_brk = (uintptr_t)result;
         if (current_brk == (uintptr_t)-1) {
             return (void*)-1;
@@ -22,7 +22,7 @@ void* _sbrk(intptr_t increment) {
     }
 
     new_brk = current_brk + increment;
-    result = (void*)_syscall(SYS_brk, new_brk);
+    result = (void*)syscall(SYS_brk, new_brk);
     if ((uintptr_t)result == (uintptr_t)-1) {
         return (void*)-1;
     }
