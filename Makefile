@@ -2,7 +2,7 @@ SYSTEM=linux
 ARCH=x86_64
 BUILD_FOLDER=$(shell realpath bin)
 
-MK_CONFIG=$(shell realpath config/)
+MK_CONFIG=$(shell realpath config)
 -include $(MK_CONFIG)/*.mk
 export MK_CONFIG
 
@@ -17,7 +17,8 @@ VERSION_FLAGS := sse4 avx2
 
 
 CONFIG_INCLUDE := -I $(shell realpath lib/config)
-BASE_INCLUDE := -I $(shell realpath $(BUILD_INCLUDE_FOLDER))
+BASE_INCLUDE := -I $(BUILD_INCLUDE_FOLDER)
+$(info include $(BUILD_INCLUDE_FOLDER))
 
 export CC
 export AR
