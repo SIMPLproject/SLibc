@@ -60,5 +60,6 @@ a.out
 .cache/
 compile_commands.json
 obj/
+bin/
 
 
