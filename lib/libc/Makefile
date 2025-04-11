@@ -10,7 +10,7 @@ ALL_FOLDER=$(CSU) $(SYSDEPS) $(SRC)
 $(ARCHIVE_NAME) : $(ALL_FOLDER)
 	$(CC) -nostdlib -shared -o $@ \
 		-Wl,--whole-archive $(ALL_FOLDER) -Wl,--no-whole-archive \
-		-Wl,-soname,$@
+		-Wl,-soname,$@ $(LDFLAGS)
 
 
 $(CSU) :

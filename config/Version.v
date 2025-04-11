@@ -20,5 +20,6 @@ SIMPL_0.1 {
 SIMPL_0.2 {
 	global:
 		printf;
+		__printf_chk;
 } SIMPL_0.1;
 

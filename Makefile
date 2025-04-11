@@ -1,6 +1,6 @@
 SYSTEM=linux
 ARCH=x86_64
-BUILD_FOLDER=$(shell realpath bin)
+BUILD_FOLDER=$(shell realpath oui)
 
 MK_CONFIG=$(shell realpath config)
 -include $(MK_CONFIG)/*.mk
@@ -30,6 +30,7 @@ export BASE_INCLUDE
 export CONFIG_INCLUDE
 export SYSTEM
 export ARCH
+export LDFLAGS
 ##############################################################################################
 
 LIBS = libc

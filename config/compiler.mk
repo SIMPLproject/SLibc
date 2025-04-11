@@ -11,7 +11,8 @@ PIC_FLAGS = -fPIC
 LDFLAGS += -nostartfiles -nodefaultlibs
 
 ifeq ($(VERSIONNING), true)
-	LDFLAGS += -Wl,--version-script=config/Version.v -v
+	VERSIONNING_CONF = $(shell realpath config/Version.v)
+	LDFLAGS += -Wl,--version-script=$(VERSIONNING_CONF) -v
 endif
 
 AS = nasm

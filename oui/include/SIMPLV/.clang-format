@@ -1,0 +1,26 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+UseTab: ForIndentation
+TabWidth: 4
+ColumnLimit: 100
+AlignConsecutiveDeclarations: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 4
+BreakConstructorInitializersBeforeComma: false
+BreakConstructorInitializers: BeforeColon
+AllowAllConstructorInitializersOnNextLine: false
+
+# Use custom brace wrapping settings
+BreakBeforeBraces: Custom
+
+BraceWrapping:
+  AfterFunction: true          # Place opening brace on a new line after functions
+  SplitEmptyFunction: false    # Keep empty functions on a single line
+  AfterClass: true             # Place opening brace on a new line after classes
+  AfterNamespace: true         # Place opening brace on a new line after namespaces
+  AfterControlStatement: true  # Place opening brace on a new line after control statements
+  SplitEmptyRecord: false      # Keep empty classes/structs on a single line
+
+# Indent preprocessor directives after the hash symbol with a single space
+IndentPPDirectives: AfterHash
+PPIndentWidth: 1
