@@ -22,8 +22,8 @@ FUNC_ARCHIVES := $(foreach func, $(FUNC_LIST), $(BUILD_FOLDER)/$(func)/$(func).a
 $(ARCHIVE_NAME): $(FUNC_ARCHIVES)
 	@echo "Packing final archive: $@"
 	rm -f $@
-	for archive in $^; do ar x $$archive; done
-	ar rcs $@ *.o
+	for archive in $^; do $(AR) x $$archive; done
+	$(AR) rcs $(AR_FLAG) $@ *.o
 	rm *.o
 
 # Archive rule per function
@@ -33,7 +33,7 @@ $(BUILD_FOLDER)/$1/$1.a: \
   $(BUILD_FOLDER)/$1/$1_config.o \
   $(foreach flag,$(VERSION_FLAGS),$(BUILD_FOLDER)/$1/$1_template_$(flag).o)
 	@echo "Archiving $$@"
-	@ar rcs $$@ $$^
+	@$(AR) rcs $(AR_FLAG) $$@ $$^
 endef
 
 # Object rules: default & config

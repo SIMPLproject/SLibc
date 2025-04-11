@@ -1,14 +1,7 @@
-BIN_DIR := bin
-OBJ_DIR := obj
-SRC_DIR := src
-ASM_SRC_DIR := asm_src
-INCLUDE_DIR := include
+BUILD_OBJ_FOLDER = $(BUILD_FOLDER)/obj
+BUILD_LIB_FOLDER = $(BUILD_FOLDER)/lib
+BUILD_INCLUDE_FOLDER = $(BUILD_FOLDER)/include
 
-TEST_SRC := benchmark.c
+INCLUDE_FOLDER = include
 
-# Create directory if it doesn't exist
-$(OBJ_DIR):
-	@mkdir -p $(OBJ_DIR)
 
-$(BIN_DIR):
-	@mkdir -p $(BIN_DIR)

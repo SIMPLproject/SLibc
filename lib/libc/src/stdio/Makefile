@@ -4,7 +4,7 @@ OBJ = $(SRC:%.c=$(BUILD_FOLDER)/%.o)
 all: $(ARCHIVE_NAME)
 
 $(ARCHIVE_NAME) : $(OBJ)
-	ar rcs $@ $(OBJ)
+	$(AR) rcs $(AR_FLAG) $@ $(OBJ)
 
 $(BUILD_FOLDER)/%.o: %.c
 	@mkdir -p $(@D)

@@ -1,73 +1,73 @@
--include config/*.mk
+SYSTEM=linux
+ARCH=x86_64
+BUILD_FOLDER=/tmp/oui
 
-LIB_NAME = $(BIN_DIR)/Slibc.a
-SO_NAME = $(BIN_DIR)/Slibc.so.1
+MK_CONFIG=$(shell realpath config/)
+-include $(MK_CONFIG)/*.mk
+export MK_CONFIG
 
-TEST_BIN := benchmark
-
-ifeq ($(VERBOSE), true)
-	CFLAGS += -D VERBOSE
-endif
-
-ifeq ($(DEBUG), true)
-	CFLAGS += -g
-endif
-
-# Source files
-SRC = $(shell find $(SRC_DIR) -type f -name '*.c')
-
-# Object files
-OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
-
-# Include directories
-INCLUDE = -I $(INCLUDE_DIR)
-INCLUDE += -I $(SRC_DIR)/config
-
-all: $(OBJ_DIR) $(BIN_DIR) $(LIB_NAME) $(SO_NAME)
+##############################################################################################
+# to rm in config folder
+CC := clang
+AR = ar
+AR_FLAGS = 
+CFLAGS := -Wall -Wextra -O3 -MMD -MP -fPIC
+DISABLE_VECTORISE := -fno-tree-vectorize -fno-builtin -mno-sse -mno-avx
+VERSION_FLAGS := sse4 avx2
 
 
-# Compile .c files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@echo "Compiling $< into $@..."
-	$(CC) $(CFLAGS) $(PIC_FLAGS) $(INCLUDE) -c $< -o $@
-	@test -f $@ || (echo "Error: $@ is not a file! Something went wrong." && exit 1)
+CONFIG_INCLUDE := -I $(shell realpath lib/config)
+BASE_INCLUDE := -I $(BUILD_INCLUDE_FOLDER)
 
-# Assemble .s files
-$(OBJ_DIR)/%.o: $(ASM_SRC_DIR)/%.s
-	@mkdir -p $(dir $@)
-	@echo "Assembling $< into $@..."
-	$(AS) $(NASM_FLAGS) -o $@ $<
-	@test -f $@ || (echo "Error: $@ is not a file! Something went wrong." && exit 1)
+export CC
+export AR
+export AR_FLAGS
+export CFLAGS
+export DISABLE_VECTORISE
+export VERSION_FLAGS
+export BASE_INCLUDE
+export CONFIG_INCLUDE
+export SYSTEM
+export ARCH
+##############################################################################################
 
-# Build static library
-$(LIB_NAME): $(OBJ) $(ASM_OBJ)
-	@echo "Building static library $(LIB_NAME)..."
-	@$(AR) rcs $@ $(filter %.o,$^)
+LIBS = libc
+LIBS_SRC = $(addprefix lib/,$(LIBS))
+SYSDEPS_BITS = $(shell find $(LIBS_SRC) -type d -wholename '*/sysdeps/$(SYSTEM)/$(ARCH)/bits')
+$(info $(SYSDEPS_BITS))
 
-# Build shared library with version script
-$(SO_NAME): $(OBJ) $(ASM_OBJ)
-	@echo "Building shared library $@..."
-	ld -nostdlib -shared -soname Slibc.so.1 -o $@ $(OBJ) $(ASM_OBJ)
-	# @strip --strip-all $@
-	ln $(SO_NAME) bin/libc.so
-	$(CC) -fno-pie -no-pie -nostdlib -DBUILD_EXECUTABLE config/start.c -c -o bin/crt1.o
+all : init_build include crt libs
+
+init_build: 
+	mkdir -p $(BUILD_FOLDER)
+	mkdir -p $(BUILD_INCLUDE_FOLDER)/bits
+	mkdir -p $(BUILD_LIB_FOLDER)
+	mkdir -p $(BUILD_OBJ_FOLDER)
+
+include: init_build
+	cp -r $(INCLUDE_FOLDER) $(BUILD_FOLDER)
+	for dir in $(SYSDEPS_BITS); do \
+		echo "cp $$dir/* -> $(BUILD_INCLUDE_FOLDER)/bits"; \
+		cp -r $$dir/* $(BUILD_INCLUDE_FOLDER)/bits/; \
+	done
+
+crt: init_build
+	@echo "building crt"
+
+libs: init_build
+	for lib in $(LIBS); do \
+		make -C lib/$$lib \
+			BUILD_FOLDER="$(BUILD_OBJ_FOLDER)/$$lib" \
+			ARCHIVE_NAME="$(BUILD_LIB_FOLDER)/$${lib}.so" ; \
+	done
 
 
-
-# Clean object files
 clean:
-	@echo "Removing object files..."
-	@rm -rf $(OBJ_DIR)
+	rm -rf $(BUILD_OBJ_FOLDER)
 
-# Full clean of libraries and executables
-fclean: clean
-	@echo "Removing libraries and executables..."
-	@rm -rf $(BIN_DIR)
+fclean:
+	rm -rf $(BUILD_FOLDER)
 
-# Rebuild all
 re: fclean all
 
--include $(OBJ:.o=.d)
-
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re init_build include
