@@ -51,16 +51,25 @@ include: init_build
 		cp -r $$dir/* $(BUILD_INCLUDE_FOLDER)/bits/; \
 	done
 
-crt: init_build
-	@echo "building crt"
-
-libs: init_build
+libs: init_build include
 	for lib in $(LIBS); do \
 		make -C lib/$$lib \
 			BUILD_FOLDER="$(BUILD_OBJ_FOLDER)/$$lib" \
 			ARCHIVE_NAME="$(BUILD_LIB_FOLDER)/$${lib}.so" ; \
 	done
 
+
+CRT_CFLAGS = -fno-pie -no-pie -nostdlib
+$(BUILD_LIB_FOLDER)/crt1.o : crt/$(SYSTEM)/$(ARCH)/crt1.c
+	$(CC) $(CRT_CFLAGS) -c $< -o $@
+
+$(BUILD_LIB_FOLDER)/crti.o : crt/$(SYSTEM)/$(ARCH)/crti.c
+	$(CC) $(CRT_CFLAGS) -c $< -o $@
+	
+$(BUILD_LIB_FOLDER)/crtn.o : crt/$(SYSTEM)/$(ARCH)/crtn.c
+	$(CC) $(CRT_CFLAGS) -c $< -o $@
+
+crt:  include $(BUILD_LIB_FOLDER)/crt1.o  $(BUILD_LIB_FOLDER)/crti.o  $(BUILD_LIB_FOLDER)/crtn.o 
 
 clean:
 	rm -rf $(BUILD_OBJ_FOLDER)
