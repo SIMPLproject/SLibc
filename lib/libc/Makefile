@@ -8,10 +8,11 @@ SRC = $(BUILD_FOLDER)/src/src.a
 ALL_FOLDER=$(CSU) $(SYSDEPS) $(SRC)
 
 $(ARCHIVE_NAME) : $(ALL_FOLDER)
-	$(CC) -nostdlib -shared -o $@ \
-		-Wl,--whole-archive $(ALL_FOLDER) -Wl,--no-whole-archive \
-		-Wl,-soname,$@ $(LDFLAGS)
-
+	@echo "Packing final archive: $@"
+	rm -f $@
+	for archive in $^; do $(AR) x $$archive; done
+	$(AR) rcs $(AR_FLAG) $@ *.o
+	rm *.o
 
 $(CSU) :
 	make -C csu \

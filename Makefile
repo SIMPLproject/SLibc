@@ -1,13 +1,13 @@
 SYSTEM=linux
 ARCH=x86_64
-BUILD_FOLDER=$(shell realpath oui)
+BUILD_FOLDER=$(shell realpath bin)
 
 MK_CONFIG=$(shell realpath config)
 -include $(MK_CONFIG)/*.mk
 export MK_CONFIG
 
-##############################################################################################
 # to rm in config folder
+##############################################################################################
 CC := clang
 AR = ar
 AR_FLAGS = 
@@ -30,15 +30,17 @@ export BASE_INCLUDE
 export CONFIG_INCLUDE
 export SYSTEM
 export ARCH
-export LDFLAGS
 ##############################################################################################
 
-LIBS = libc
-LIBS_SRC = $(addprefix lib/,$(LIBS))
-SYSDEPS_BITS = $(shell find $(LIBS_SRC) -type d -wholename '*/sysdeps/$(SYSTEM)/$(ARCH)/bits')
+LIBS_SRC = $(addprefix lib/,$($(LIBS)_NAME))
 $(info $(SYSDEPS_BITS))
 
-all : init_build include crt libs custom_clang
+all : init_build include crt libs_archive custom_clang libs_shared
+
+
+# init phase
+##############################################################################################
+SYSDEPS_BITS = $(shell find $(LIBS_SRC) -type d -wholename '*/sysdeps/$(SYSTEM)/$(ARCH)/bits')
 
 init_build: 
 	mkdir -p $(BUILD_FOLDER)
@@ -53,13 +55,50 @@ include: init_build
 		cp -r $$dir/* $(BUILD_INCLUDE_FOLDER)/bits/; \
 	done
 
-libs: init_build include
-	for lib in $(LIBS); do \
-		make -C lib/$$lib \
-			BUILD_FOLDER="$(BUILD_OBJ_FOLDER)/$$lib" \
-			ARCHIVE_NAME="$(BUILD_LIB_FOLDER)/$${lib}.so" ; \
-	done
+##############################################################################################
 
+
+
+# build lib
+##############################################################################################
+# all lib settings are in config/lib.mk
+$(info LIBS = $(LIBS))
+
+# $(1) lib name
+define build_archive
+	echo $(1)
+	$(MAKE) -C lib/$(1) \
+		BUILD_FOLDER="$(BUILD_OBJ_FOLDER)/$(1)" \
+		ARCHIVE_NAME="$(BUILD_LIB_FOLDER)/$(1).a"
+endef
+
+# Define a function to build the shared library.
+# $(1) lib name
+# $(2) abi version
+define build_shared
+	$(CC) -nostdlib -shared -o $(BUILD_LIB_FOLDER)/$(1).so.$(2) \
+		-Wl,--whole-archive $(BUILD_LIB_FOLDER)/$(1).a -Wl,--no-whole-archive \
+		-Wl,-soname,$(1).so.$(2) $(LDFLAGS)
+	ln -sf $(1).so.$(2) $(BUILD_LIB_FOLDER)/$(1).so
+endef
+
+# ----------------------------------------------------------------------------
+# The target that builds the static archives.
+libs_archive: init_build include
+	$(foreach lib,$(LIBS), $(call build_archive,$($(lib)_NAME)))
+
+# The target that builds the shared libraries; depends on static archives.
+libs_shared: libs_archive
+	$(foreach lib, $(LIBS), $(call build_shared,$($(lib)_NAME),$($(lib)_ABI_VERSION)))
+
+##############################################################################################
+
+
+
+# crt (start and fini file for .so lib)
+##############################################################################################
+
+crt:  include $(BUILD_LIB_FOLDER)/crt1.o  $(BUILD_LIB_FOLDER)/crti.o  $(BUILD_LIB_FOLDER)/crtn.o 
 
 CRT_CFLAGS = -fno-pie -nostdlib
 $(BUILD_LIB_FOLDER)/crt1.o : crt/$(SYSTEM)/$(ARCH)/crt1.c
@@ -71,17 +110,26 @@ $(BUILD_LIB_FOLDER)/crti.o : crt/$(SYSTEM)/$(ARCH)/crti.c
 $(BUILD_LIB_FOLDER)/crtn.o : crt/$(SYSTEM)/$(ARCH)/crtn.c
 	$(CC) $(CRT_CFLAGS) -c $< -o $@
 
-crt:  include $(BUILD_LIB_FOLDER)/crt1.o  $(BUILD_LIB_FOLDER)/crti.o  $(BUILD_LIB_FOLDER)/crtn.o 
+##############################################################################################
 
- PATH := $(BUILD_FOLDER):$(PATH)
+
+
+# custom clang for shared object 
+##############################################################################################
+PATH := $(BUILD_FOLDER):$(PATH)
 
 custom_clang : init_build
-	
 	cp config/sclang $(BUILD_FOLDER)/sclang
 	echo "export PATH=$(BUILD_FOLDER):$$PATH" > $(BUILD_FOLDER)/clang_path
 	echo "export SLIBC_PATH=$(BUILD_FOLDER)" >> $(BUILD_FOLDER)/clang_path
 	chmod +x $(BUILD_FOLDER)/clang_path
 
+##############################################################################################
+
+
+
+# utils 
+##############################################################################################
 clean:
 	rm -rf $(BUILD_OBJ_FOLDER)
 
@@ -91,3 +139,4 @@ fclean:
 re: fclean all
 
 .PHONY: all clean fclean re init_build include
+##############################################################################################
