@@ -5,7 +5,7 @@ CSU = $(BUILD_FOLDER)/csu/csu.a
 SYSDEPS = $(BUILD_FOLDER)/sysdeps/sysdeps.a
 SRC = $(BUILD_FOLDER)/src/src.a
 
-CFLAGS += -D libc
+CFLAGS += -D LIB_NAME=libc
 
 ALL_FOLDER=$(CSU) $(SYSDEPS) $(SRC)
 
