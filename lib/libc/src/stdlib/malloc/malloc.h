@@ -2,7 +2,6 @@
 #define MALLOC_H
 
 #include <unistd.h>
-#include <immintrin.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <sys/mman.h>

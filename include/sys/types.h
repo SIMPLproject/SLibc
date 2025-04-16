@@ -1,26 +1,8 @@
 #ifndef  __SYS_TYPE_H__
 #define __SYS_TYPE_H__
 
-
-
-/* Determine architecture width */
-#if defined __x86_64__ && !defined __ILP32__
-# define __ARCH_WIDTH 64
-#else
-# define __ARCH_WIDTH 32
-#endif
-
-/* Compiler-specific attributes for alignment and inline functions */
-#if defined(__clang__) || defined(__GNUC__)
-# define _ALIGN(N) __attribute__((aligned(N)))
-# define __Inline __attribute__((always_inline)) inline
-#elif defined(_MSC_VER)
-# define __Inline __forceinline
-# define _ALIGN(N)
-#else
-# define __Inline inline
-# define _ALIGN(N)
-#endif
+#include <sys/cdefs.h>
+#include <sys/arch.h>
 
 /* Define 64-bit integer types based on architecture */
 #if __ARCH_WIDTH == 64 && !defined __APPLE__

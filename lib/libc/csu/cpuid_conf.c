@@ -1,5 +1,4 @@
 #include <cpuid_conf.h>
-#include <cpuid.h>
 #include <stdint.h>
 #include <stdio.h>
 

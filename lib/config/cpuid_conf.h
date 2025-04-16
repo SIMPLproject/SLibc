@@ -1,7 +1,6 @@
 #ifndef __CPUID_CONF_H__
 #define __CPUID_CONF_H__
 
-#include <cpuid.h>
 #include <stdint.h>
 
 #ifdef __cpuid

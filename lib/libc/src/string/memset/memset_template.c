@@ -11,9 +11,9 @@
 */
 
 #include <stdint.h>
-#include <config.h>
-#include <immintrin.h>
 #include <simplv.h>
+#include <config.h>
+
 
 #define REP_STOSB_THRESHOLD 2048
 #define UNROLL_SIZE 96
@@ -48,7 +48,7 @@ void *ARCH_SYM(memset)(void* dest, int c, size_t n) {
         vec vec = v256b_set1_char(value);
         size_t unroll_count = n / UNROLL_SIZE;
         size_t remainder = n % UNROLL_SIZE;
-        _mm_prefetch((const char*)d + UNROLL_SIZE, _MM_HINT_T0);
+        // // _mm_prefetch((const char*)d + UNROLL_SIZE, _MM_HINT_T0);
         for (size_t i = 0; i < unroll_count; i++) {
             v256b_storeu((uvec*)d, vec);
             v256b_storeu((uvec*)(d + 32), vec);

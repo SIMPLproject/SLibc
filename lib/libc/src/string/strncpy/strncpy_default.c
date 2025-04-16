@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdlib.h>
 #include <stddef.h>
 
 char *_strncpy_default(char *dest, const char *src, size_t n) {

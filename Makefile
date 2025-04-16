@@ -15,6 +15,8 @@ CFLAGS := -Wall -Wextra -O3 -MMD -MP -fPIC -g
 DISABLE_VECTORISE := -fno-tree-vectorize -fno-builtin -mno-sse -mno-avx
 VERSION_FLAGS := sse4 avx2
 
+# for the compile_commands.json
+CFLAGS += -nostdinc
 
 CONFIG_INCLUDE := -I $(shell realpath lib/config)
 BASE_INCLUDE := -I $(BUILD_INCLUDE_FOLDER)

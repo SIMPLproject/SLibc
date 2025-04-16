@@ -10,8 +10,9 @@
 */
 
 #include <simplv.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <config.h>
-
 
 char *ARCH_SYM(strncpy)(char *dst, const char *src, size_t n)
 {

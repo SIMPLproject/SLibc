@@ -1,5 +1,6 @@
 #include "malloc.h"
 #include "config.h"
+#include <stdlib.h>
 
 
 Block *freelist = NULL;
@@ -65,9 +66,9 @@ void *_aligned_alloc(size_t alignment, size_t size) {
     Block *block = NULL;
     
     if (size <= CACHE_SIZE_L1) {
-        _mm_prefetch(freelist, _MM_HINT_T0);
+        // _mm_prefetch(freelist, _MM_HINT_T0);
     } else if (size <= CACHE_SIZE_L2) {
-        _mm_prefetch(freelist, _MM_HINT_T1);
+        // _mm_prefetch(freelist, _MM_HINT_T1);
     }
 	#if DEBUG
 		printf("Allocating %zu bytes with alignment %zu\n", size, alignment);

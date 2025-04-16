@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include <immintrin.h>
-#include <string.h>
+#include <stdlib.h>
 #include <stdlib.h>
 
 #define Nb 4

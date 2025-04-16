@@ -11,7 +11,6 @@
 
 #include <simplv.h>
 #include <stdint.h>
-#include <immintrin.h>
 #include <stdlib.h>
 #include <config.h>
 
@@ -56,7 +55,7 @@ char *ARCH_SYM(strchr)(const char *p, int ch)
             return NULL;
 
         ptr += VEC_SIZE;
-        _mm_prefetch((const char *)(ptr + VEC_SIZE), _MM_HINT_T0);
+        // _mm_prefetch((const char *)(ptr + VEC_SIZE), _MM_HINT_T0);
     }
 }
 

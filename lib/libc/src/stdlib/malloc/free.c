@@ -2,6 +2,8 @@
 #include "malloc.h"
 #include "config.h"
 
+#include <stdlib.h>
+
 extern Block *freelist;
 extern size_t block_size;
 extern int allocated_blocks;

@@ -13,8 +13,8 @@
 
 #include <simplv.h>
 #include <stdint.h>
-#include <immintrin.h>
 #include <config.h>
+
 
 int ARCH_SYM(strncmp)(const char *s1, const char *s2, size_t n)
 {

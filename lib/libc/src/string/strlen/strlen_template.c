@@ -15,8 +15,8 @@ __builtin_ctz() is a builtin function that returns the number of trailing 0-bits
 */
 
 #include <config.h>
-#include <immintrin.h>
 #include <simplv.h>
+#include <stdlib.h>
 #include <stdlib.h>
 
 
@@ -46,7 +46,7 @@ size_t ARCH_SYM(strlen)(const char *str)
 
     while (1)
     {
-        _mm_prefetch(str + 32, _MM_HINT_T0);
+        // _mm_prefetch(str + 32, _MM_HINT_T0);
         vec ymm_data = v256b_loadu((const uvec *)str);
         vec cmp_result = v32c_cmpeq(ymm_zero, ymm_data);
         int32_t mask = v32c_movemask(cmp_result);
