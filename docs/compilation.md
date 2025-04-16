@@ -1,7 +1,7 @@
 ## Compilation of the Lib - Explained
 
 ### Introduction
-I know that the Makefile for the library could be a simple 100-line file, like in musl, but I chose to have one `Makefile` per folder. This gives more flexibility for how to compile each part. For example, in the string library, the template file is compiled multiple times based on the architecture (SSE, AVX, etc.). You can read more about this specific case in the [libc string folder](../lib/libc/string/Makefile).
+I know that the Makefile for the library could be a simple 100-line file, like in musl, but I chose to have one `Makefile` per folder. This gives more flexibility for how to compile each part. For example, in the string library, the template file is compiled multiple times based on the architecture (SSE, AVX, etc.). You can read more about this specific case in the [libc string folder](../lib/libc/src/string/Makefile).
 
 ### Configuration Folder
 In the [config folder](../config), you'll find the default Makefile settings based on the architecture and OS. In the future, a `./configure` script will be available to modify libc settings, enable debug mode, etc.
