@@ -6,7 +6,7 @@
 /*   By: babonnet <babonnet@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:39:57 by babonnet          #+#    #+#             */
-/*   Updated: 2025/04/11 19:30:11 by babonnet         ###   ########.fr       */
+/*   Updated: 2025/04/17 13:40:23 by babonnet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int ft_printf(const char *format, ...)
 	va_list args;
 	int     count;
 
+	write(1, "test\n", 5);
 	if (format == NULL)
 		return (-1);
 	va_start(args, format);

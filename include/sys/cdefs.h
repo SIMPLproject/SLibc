@@ -33,6 +33,7 @@
 #define __unused
 #endif
 
+
 #if SHARED
 # define simpl_hidden_def(name) \
 	__asm__(".hidden " ## #name) __attribute__((hidden))

@@ -41,3 +41,13 @@ $(MAKE) -C lib/foo \
 
 Each folder has its own rules. As mentioned earlier, the string folder is a good example: if the Makefile needs to compile with SIMD optimizations on x86_64, it generates multiple versions depending on the supported architectures via the `VERSION_FLAGS = sse avx` variable. Each version is compiled, and an IFUNC is used to resolve the correct symbol at runtime.
 
+
+
+if !NATIVE
+_template will be compile in function of the VERSION_FLAGS list
+_config will be compile in SHARED or ARCHIVE to _config_shared.o and _config_archive.o
+else
+_config will be compile onse to _config.o
+_template ONLY the NATIVE VERSION with no ifunc in shared
+
+
