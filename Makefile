@@ -37,7 +37,7 @@ export ARCH
 LIBS_SRC = $(addprefix lib/,$($(LIBS)_NAME))
 $(info $(SYSDEPS_BITS))
 
-all : init_build include crt libs_archive custom_clang libs_shared
+all : init_build include crt  custom_clang build_libs
 
 
 # init phase
@@ -71,27 +71,11 @@ define build_archive
 	echo $(1)
 	$(MAKE) -C lib/$(1) \
 		BUILD_FOLDER="$(BUILD_OBJ_FOLDER)/$(1)" \
-		ARCHIVE_NAME="$(BUILD_LIB_FOLDER)/$(1).a"
+		NAME="$(1)"
 endef
 
-# Define a function to build the shared library.
-# $(1) lib name
-# $(2) abi version
-define build_shared
-	$(CC) -nostdlib -shared -o $(BUILD_LIB_FOLDER)/$(1).so.$(2) \
-		-Wl,--whole-archive $(BUILD_LIB_FOLDER)/$(1).a -Wl,--no-whole-archive \
-		-Wl,-soname,$(1).so.$(2) $(LDFLAGS)
-	ln -sf $(1).so.$(2) $(BUILD_LIB_FOLDER)/$(1).so
-endef
-
-# ----------------------------------------------------------------------------
-# The target that builds the static archives.
-libs_archive: init_build include
+build_libs: init_build include
 	$(foreach lib,$(LIBS), $(call build_archive,$($(lib)_NAME)))
-
-# The target that builds the shared libraries; depends on static archives.
-libs_shared: libs_archive
-	$(foreach lib, $(LIBS), $(call build_shared,$($(lib)_NAME),$($(lib)_ABI_VERSION)))
 
 ##############################################################################################
 

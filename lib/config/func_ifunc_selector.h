@@ -9,7 +9,10 @@
  */
 
 #if defined(SHARED) && !defined(NATIVE)
+
 #    include "cpuid_conf.h"
+
+FUNC_NAME(x) x
 
 enum ifunc_type_u {
     IFUNC_MMX = 1u,
@@ -62,27 +65,17 @@ enum ifunc_type_u {
 
 #    define __BASE_TYPE_JOIN_EXPANDED(a, b) a##_##b
 
-#    define __BASE_TYPE_JOIN(a, b) __BASE_TYPE_JOIN_EXPANDED(a, b)
+#    define __BASE_NAME_JOIN(a, b) __BASE_TYPE_JOIN_EXPANDED(a, b)
 
 #    if defined(NATIVE)
-#        define __BASE_TYPE(x) __BASE_TYPE_JOIN(x, EXPAND(NATIVE))
+#        define __FUNC_NAME(x) __BASE_NAME_JOIN(x, EXPAND(NATIVE))
 #    else
-#        define __BASE_TYPE(x) __BASE_TYPE_JOIN(x, default)
+#        define __FUNC_NAME(x) __BASE_NAME_JOIN(x, default)
 #    endif
 
-#    define BASE_TYPE(x) __BASE_TYPE(x)
+#    define FUNC_NAME(x) __FUNC_NAME(x)
 
-#    define __base_prototype(name, type_name, ...) type_name name(__VA_ARGS__);
-
-#    define __STRINGIFY(x) #x
-#    define STRINGIFY(x) __STRINGIFY(x)
-
-#    define simpl_weak_alias(name, target)                                                         \
-        extern __typeof__(target) name __attribute__((weak, alias(STRINGIFY(target))));
-
-#    define simpl_func_ifunc_init(name, type_name, version, ...)                                   \
-        __base_prototype(BASE_TYPE(name), type_name, __VA_ARGS__);                                 \
-        simpl_weak_alias(name, BASE_TYPE(name))
+#    define simpl_func_ifunc_init(name, type_name, version, ...)
 
 #endif
 

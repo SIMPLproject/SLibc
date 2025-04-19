@@ -1,7 +1,7 @@
 #list of all lib and there abi
 LIBS=
 
-LIBS+=LIBC
-LIBC_NAME=libc
-LIBC_ABI_VERSION=1
-LIBC_VERSIONING_FILE=versioning/libc.v
+LIBS+=libc
+libc_NAME=libc
+libc_ABI_VERSION=1
+libc_VERSIONING_FILE=versioning/libc.v

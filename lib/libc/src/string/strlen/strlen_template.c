@@ -16,6 +16,7 @@ __builtin_ctz() is a builtin function that returns the number of trailing 0-bits
 
 #include <config.h>
 #include <simplv.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <stdlib.h>
 
