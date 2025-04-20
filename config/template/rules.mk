@@ -16,7 +16,7 @@ __SRC_$(1)_CONFIG := $$(filter %_build.c,$(2))
 __SRC_$(1)_TEMPLATE := $$(filter %_simd.c,$(2))
 
 $(1) = $$(patsubst %.c,$$(BUILD_FOLDER)/%.o,$$(__SRC_$(1)_BASE))
-$(1) += $$(foreach flag,$$(VERSION_FLAGS),$$(patsubst %_simd.c,$$(BUILD_FOLDER)/%_$$(flag).o,$$(__SRC_$(1)_TEMPLATE)))
+$(1) += $$(foreach flag,$$(VERSION_FLAGS),$$(patsubst %_simd.c,$$(BUILD_FOLDER)/%_$$(flag)_shared.o,$$(__SRC_$(1)_TEMPLATE)))
 $(1) += $$(patsubst %.c,$$(BUILD_FOLDER)/%_archive.o,$$(__SRC_$(1)_CONFIG))
 $(1) += $$(patsubst %.c,$$(BUILD_FOLDER)/%_shared.o,$$(__SRC_$(1)_CONFIG))
 endef
@@ -24,7 +24,7 @@ endef
 INCLUDE = $(BASE_INCLUDE) $(CONFIG_INCLUDE)
 
 define TEMPLATE_RULES
-$(BUILD_FOLDER)/%_$(1).o : %_simd.c
+$(BUILD_FOLDER)/%_$(1)_shared.o : %_simd.c
 	mkdir -p $$(@D)
 	$(CC) $(CFLAGS) $(INCLUDE) -m$(1) -c $$< -o $$@
 endef
@@ -49,13 +49,23 @@ $(BUILD_FOLDER)/%.o: %.c
 	$(CC) $(CFLAGS) $(DISABLE_VECTORISE) $(INCLUDE) -c $< -o $@
 
 # $(1) lib name
-# $(2) OBJ
+# $(2) lib build folder
+# $(3) OBJ
 define COMPILE_LIB
-compile_libs : $(1).a
+compile_libs : $(2)/$(1).a $(2)/$(1).so
 
-$(1).a : $(2)
-	echo $(1)
-	$(AR) rcs $$@ $$^
+$$(eval OBJ_SHARED_$(1) := $$(filter-out %_archive.o,$(3)))
+$$(eval OBJ_ARCHIVE_$(1) := $$(filter-out %_shared.o %_generic.o,$(3)))
+
+$$(info OBJ_SHARED_$(1) = $$(OBJ_SHARED_$(1)))
+$$(info OBJ_ARCHIVE_$(1) = $$(OBJ_ARCHIVE_$(1)))
+
+$(2)/$(1).so: $$(OBJ_SHARED_$(1))
+	$$(CC) -shared -o $$@ $$(CFLAGS) $$^  $$(LDFLAGS)
+
+$(2)/$(1).a: $$(OBJ_ARCHIVE_$(1))
+	$$(AR) rcs $$@ $$^
+
 endef
 
 endif

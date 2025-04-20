@@ -71,6 +71,7 @@ define build_archive
 	echo $(1)
 	$(MAKE) -C lib/$(1) \
 		BUILD_FOLDER="$(BUILD_OBJ_FOLDER)/$(1)" \
+		LIB_FOLDER="$(BUILD_LIB_FOLDER)" \
 		NAME="$(1)"
 endef
 
