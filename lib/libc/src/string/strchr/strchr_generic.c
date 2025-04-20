@@ -1,6 +1,8 @@
 #include <string.h>
+#include <config.h>
 
-char *_strchr_default(const char *s, int c) {
+
+char *ARCH_SYM(strchr)(const char *s, int c) {
 	if (!s) return 0;
 	while (*s && *s != (char)c) {
 		s++;

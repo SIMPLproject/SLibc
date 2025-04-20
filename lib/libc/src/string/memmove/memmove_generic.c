@@ -1,6 +1,7 @@
 #include <stdlib.h>
+#include <config.h>
 
-void	*_memmove_default(void *dest, const void *source, size_t n)
+void	*ARCH_SYM(memmove)(void *dest, const void *source, size_t n)
 {
 	unsigned char	*src;
 	unsigned char	*dst;

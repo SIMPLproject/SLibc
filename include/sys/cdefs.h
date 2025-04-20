@@ -1,6 +1,9 @@
 #ifndef __CDEFS_H__
 #define __CDEFS_H__
 
+#define __STRINGIFY(x) #x
+#define STRINGIFY(x) __STRINGIFY(x)
+
 /* Compiler-specific attributes for alignment and inline functions */
 #if defined(__clang__) || defined(__GNUC__)
 # define _ALIGN(N) __attribute__((aligned(N)))
@@ -41,6 +44,18 @@
 #else
 # define simpl_hidden_def(name)
 # define simpl_hidden_proto(name)
+#endif
+
+
+#if defined(__APPLE__)
+#define simpl_weak_alias(func, func_source) \
+    __typeof__(func_source) __attribute__((weak)) *func = &func_source;
+#elif defined(__GNUC__) || defined(__clang__)
+#define simpl_weak_alias(func, func_source) \
+    extern __typeof__(func_source) func __attribute__((weak, alias(STRINGIFY(func_source))));
+#else
+#define simpl_weak_alias(name, func)                                           \
+  _Pragma("GCC error \"Weak alias is not supported on this compiler\"")
 #endif
 
 #endif /* __CDEFS_H__ */

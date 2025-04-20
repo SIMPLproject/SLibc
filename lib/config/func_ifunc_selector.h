@@ -8,11 +8,9 @@
  * - if not shared just simlink the base
  */
 
-#if defined(SHARED) && !defined(NATIVE)
+#if defined(SHARED)
 
 #    include "cpuid_conf.h"
-
-FUNC_NAME(x) x
 
 enum ifunc_type_u {
     IFUNC_MMX = 1u,
@@ -37,7 +35,7 @@ enum ifunc_type_u {
 #    define __ifunc_create_prototype(name, type_name, ...)                                         \
         type_name name##_avx(__VA_ARGS__);                                                         \
         type_name name##_sse(__VA_ARGS__);                                                         \
-        type_name name##_default(__VA_ARGS__);
+        type_name name##_generic(__VA_ARGS__);
 
 #    define __ifunc_creator(name, type_name, _version, ...)                                        \
         type_name (*name##_ifunc())(__VA_ARGS__)                                                   \
@@ -51,32 +49,12 @@ enum ifunc_type_u {
             {                                                                                      \
                 _func_selected(name##_sse)                                                         \
             }                                                                                      \
-            _func_selected(name##_default)                                                         \
+            _func_selected(name##_generic)                                                         \
         }
 #    define simpl_func_ifunc_init(name, type_name, version, ...)                                   \
         extern type_name name(__VA_ARGS__) __attribute__((ifunc(#name "_ifunc")));                 \
         __ifunc_create_prototype(name, type_name, __VA_ARGS__)                                     \
             __ifunc_creator(name, type_name, version, __VA_ARGS__)
-#else
-
-/* NATIVE could be avx sse... */
-/* some small joy of the c preprocessor expend */
-#    define EXPAND(x) x
-
-#    define __BASE_TYPE_JOIN_EXPANDED(a, b) a##_##b
-
-#    define __BASE_NAME_JOIN(a, b) __BASE_TYPE_JOIN_EXPANDED(a, b)
-
-#    if defined(NATIVE)
-#        define __FUNC_NAME(x) __BASE_NAME_JOIN(x, EXPAND(NATIVE))
-#    else
-#        define __FUNC_NAME(x) __BASE_NAME_JOIN(x, default)
-#    endif
-
-#    define FUNC_NAME(x) __FUNC_NAME(x)
-
-#    define simpl_func_ifunc_init(name, type_name, version, ...)
-
 #endif
 
 #endif /* __FUNC_IFUNC_SELECTOR_H__ */

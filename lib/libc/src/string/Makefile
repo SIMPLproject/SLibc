@@ -7,7 +7,7 @@
 #
 # • Contain the following files:
 #   - foo_config.c     → Handles IFUNC, weak aliases, etc.
-#   - foo_default.c    → Base version without optimizations (fallback)
+#   - foo_generic.c    → Base version without optimizations (fallback)
 #   - foo_template.c   → Optimized version, compiled multiple times
 #                        depending on the target CPU architecture
 # ─────────────────────────────────────────────────────────────
@@ -29,7 +29,7 @@ $(ARCHIVE_NAME): $(FUNC_ARCHIVES)
 # Archive rule per function
 define GEN_FUNC_ARCHIVE
 $(BUILD_FOLDER)/$1/$1.a: \
-  $(BUILD_FOLDER)/$1/$1_default.o \
+  $(BUILD_FOLDER)/$1/$1_generic.o \
   $(BUILD_FOLDER)/$1/$1_config.o \
   $(foreach flag,$(VERSION_FLAGS),$(BUILD_FOLDER)/$1/$1_template_$(flag).o)
 	@echo "Archiving $$@"
@@ -38,7 +38,7 @@ endef
 
 # Object rules: default & config
 define GEN_FUNC_OBJECT_RULES
-$(BUILD_FOLDER)/$1/$1_default.o: $1/$1_default.c
+$(BUILD_FOLDER)/$1/$1_generic.o: $1/$1_generic.c
 	@mkdir -p $$(dir $$@)
 	$$(CC) $$(CFLAGS) $$(DISABLE_VECTORISE) $$(BASE_INCLUDE) -c $$< -o $$@
 

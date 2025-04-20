@@ -1,6 +1,7 @@
-#include "stdint.h"
+#include <stdint.h>
+#include <config.h>
 
-int	_strncmp_default(const char *first, const char *second, size_t length)
+int	ARCH_SYM(strncmp)(const char *first, const char *second, size_t length)
 {
 	size_t	i;
 

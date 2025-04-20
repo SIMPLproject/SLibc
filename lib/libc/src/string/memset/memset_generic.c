@@ -1,6 +1,7 @@
 #include <stdint.h>
+#include <config.h>
 
-void	*_memset_default(void *s, int c, size_t n)
+void	*ARCH_SYM(memset)(void *s, int c, size_t n)
 {
 	uint8_t	*ptr;
 

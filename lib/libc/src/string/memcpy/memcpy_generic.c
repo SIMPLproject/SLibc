@@ -1,7 +1,8 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <config.h>
 
-void	*_memcpy_default(void *destination, const void *source, size_t num)
+void	*ARCH_SYM(memcpy)(void *destination, const void *source, size_t num)
 {
 	unsigned char	*src;
 	unsigned char	*dest;

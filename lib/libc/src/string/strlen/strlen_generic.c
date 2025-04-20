@@ -1,6 +1,7 @@
 #include <stdint.h>
+#include <config.h>
 
-size_t _strlen_default(const char *s) 
+size_t ARCH_SYM(strlen)(const char *s) 
 {
 	const char *endptr;
 
