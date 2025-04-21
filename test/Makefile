@@ -2,7 +2,7 @@ all : compile
 	@./test_string
 
 compile :
-	@clang -nostdlib -static -g -O0 -fno-stack-protector -fno-pie -mno-red-zone -nostdlib -nostdinc -ffreestanding  \
+	@clang -nostdlib -static -g -O0 -fno-stack-protector -fno-pie -ffreestanding  \
 		../bin/lib/crt1.o ../bin/lib/crti.o ../bin/lib/crtn.o \
 		string.c ../bin/lib/libc.a \
 		-I ../bin/include \
