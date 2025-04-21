@@ -66,10 +66,6 @@ typedef struct Block {
 
 #define MBLOCK_SIZE ALIGN(sizeof(Block), ALIGNMENT)
 
-/* memory utils */
-
-void *_memcpy_avx(void *dest, const void *src, size_t n);
-void *_memset_avx(void *s, int c, size_t n);
 
 /* block utils */
 

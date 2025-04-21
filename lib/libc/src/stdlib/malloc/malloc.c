@@ -26,7 +26,7 @@ void *_malloc(size_t size) {
             Block *block = bins[bin_index];
             bins[bin_index] = block->next;
             block->free = 0;
-            _memset_avx(block->aligned_address, 0, size);
+            memset(block->aligned_address, 0, size);
             return block->aligned_address;
         }
     }
@@ -46,7 +46,7 @@ void *_malloc(size_t size) {
                 if (block->size >= size + MBLOCK_SIZE)
                     split_block(block, size, ALIGNMENT);
                 block->free = 0;
-                _memset_avx(block->aligned_address, 0, size);
+                memset(block->aligned_address, 0, size);
             } else {
                 block = request_space_sbrk(last, size, ALIGNMENT);
                 if (__builtin_expect(!block, 0))

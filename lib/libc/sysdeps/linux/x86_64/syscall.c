@@ -1,7 +1,7 @@
 #include <config.h>
 #include <stdarg.h>
 
-long _syscall(long number, ...)
+long __syscall(long number, ...)
 {
     va_list args;
     va_start(args, number);
@@ -34,4 +34,4 @@ long _syscall(long number, ...)
 }
 
 
-simpl_weak_alias(syscall, _syscall)
+simpl_weak_alias(syscall, __syscall)
