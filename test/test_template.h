@@ -30,6 +30,14 @@
     }
 
 #define BASIC_CMP_RES_FUNC(res, func_res) (res == func_res)
+#define BASIC_CMP_RES_FUNC_ADDR(res, func_res) (res == &func_res)
+#define BASIC_CMP_RES_FUNC_PTR_VALUE(res, func_res) (res == *func_res)
+
+#define BASIC_TEST_ADDRESS(description, func, ret, args...)                                        \
+    TEST(description, func, BASIC_CMP_RES_FUNC_ADDR, ret, args)
+
+#define BASIC_TEST_PTR_VALUE(description, func, ret, args...)                                      \
+    TEST(description, func, BASIC_CMP_RES_FUNC_PTR_VALUE, ret, args)
 
 #define BASIC_TEST(description, func, ret, args...)                                                \
     TEST(description, func, BASIC_CMP_RES_FUNC, ret, args)
