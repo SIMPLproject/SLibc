@@ -13,7 +13,7 @@ AR = ar
 AR_FLAGS = 
 CFLAGS = -Wall -Wextra -O0 -MMD -MP -fPIC -g 
 
-CFLAGS +=  -fno-stack-protector -fno-pie -mno-red-zone -nostdlib -ffreestanding
+CFLAGS +=  -fno-stack-protector  -mno-red-zone -nostdlib -ffreestanding
 
 VERSION_FLAGS = sse4 avx2
 

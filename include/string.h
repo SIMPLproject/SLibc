@@ -13,6 +13,8 @@ int strcmp (const char *__s1, const char *__s2) __attribute_pure__ __nonnull(1, 
 
 void *memset (void *__s, int __c, size_t __n) __nonnull (1);
 
+void *memmove(void *dest, const void *src, size_t len) __nonnull(1, 2);
+
 void *memcpy (void *__d, const void *__s, size_t __n) __nonnull (1, 2);
 
 char *strncpy (char *__d, const char *__s, size_t __n) __nonnull (1, 2);

@@ -66,11 +66,8 @@ compile_libs : $(2)/$(1).a $(2)/$(1).so
 $$(eval OBJ_SHARED_$(1) := $$(filter-out %_archive.o,$(3)))
 $$(eval OBJ_ARCHIVE_$(1) := $$(filter-out %_shared.o %_generic.o,$(3)))
 
-$$(info OBJ_SHARED_$(1) = $$(OBJ_SHARED_$(1)))
-$$(info OBJ_ARCHIVE_$(1) = $$(OBJ_ARCHIVE_$(1)))
-
 $(2)/$(1).so: $$(OBJ_SHARED_$(1))
-	$$(CC) -fPIC -shared -Wl,-soname,$(1)  -Wl,-z,defs -Wl,--dynamic-linker=/lib64/ld-linux-x86-64.so.2 -nostdlib -o $$@ $$^  $$(LDFLAGS)
+	$$(CC) -v -shared -Wl,-soname,$(1)  -Wl,-z,defs -Wl,--dynamic-linker=/lib64/ld-linux-x86-64.so.2 -nostdlib -o $$@ $$^  $$(LDFLAGS)
 
 $(2)/$(1).a: $$(OBJ_ARCHIVE_$(1))
 	$$(AR) rcs $$@ $$^

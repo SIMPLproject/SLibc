@@ -9,6 +9,10 @@ extern size_t block_size;
 extern int allocated_blocks;
 extern int freed_blocks;
 
+static inline Block *get_freelist(void) {
+    return freelist;
+}
+
 /*
 	* Function to coalesce free blocks
 	* this function is called after freeing a block
@@ -23,7 +27,7 @@ extern int freed_blocks;
 
 #define MAX_BLOCK_SIZE 1024 * 1024
 void coalesce_free_blocks() {
-    Block *current = freelist;
+    Block *current = get_freelist();
     while (current && current->next) {
         if (current->free && current->next->free) {
             current->size += MBLOCK_SIZE + current->next->size;
@@ -54,7 +58,6 @@ void coalesce_free_blocks() {
 	* the free flag is set to 1
 	* the number of freed blocks is incremented
 */
-
 
 void _free(void *ptr) {
     if (__builtin_expect(ptr == NULL, 0))
