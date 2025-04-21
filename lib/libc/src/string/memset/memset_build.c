@@ -1,13 +1,12 @@
-#include "func_ifunc_selector.h"
 #include <config.h>
 
-#define memset _memset
+#define memset __memset
 #include <string.h>
 #undef memset
 
 #if defined(SHARED) && !defined(NATIVE)
 
-simpl_func_ifunc_init(_memset, void *, IFUNC_AVX | IFUNC_ERMS, void *, int c, size_t)
+simpl_func_ifunc_init(__memset, void *, IFUNC_AVX | IFUNC_ERMS, void *, int c, size_t)
 
 #else
 
@@ -16,4 +15,4 @@ simpl_func_ifunc_init(_memset, void *, IFUNC_AVX | IFUNC_ERMS, void *, int c, si
 
 #endif
 
-simpl_weak_alias(memset, _memset)
+simpl_weak_alias(memset, __memset)

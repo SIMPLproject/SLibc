@@ -12,7 +12,7 @@ CC := clang
 AR = ar
 AR_FLAGS = 
 CFLAGS := -Wall -Wextra -O3 -MMD -MP -fPIC -g
-DISABLE_VECTORISE := -fno-tree-vectorize -fno-builtin -mno-sse -mno-avx
+SIMD_LEVEL := -fno-tree-vectorize -fno-builtin -mno-sse -mno-avx
 VERSION_FLAGS := sse4 avx2
 
 # for the compile_commands.json
@@ -26,7 +26,7 @@ export CC
 export AR
 export AR_FLAGS
 export CFLAGS
-export DISABLE_VECTORISE
+export SIMD_LEVEL
 export VERSION_FLAGS
 export BASE_INCLUDE
 export CONFIG_INCLUDE

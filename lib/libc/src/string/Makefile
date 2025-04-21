@@ -40,11 +40,11 @@ endef
 define GEN_FUNC_OBJECT_RULES
 $(BUILD_FOLDER)/$1/$1_generic.o: $1/$1_generic.c
 	@mkdir -p $$(dir $$@)
-	$$(CC) $$(CFLAGS) $$(DISABLE_VECTORISE) $$(BASE_INCLUDE) -c $$< -o $$@
+	$$(CC) $$(CFLAGS) $$(SIMD_LEVEL) $$(BASE_INCLUDE) -c $$< -o $$@
 
 $(BUILD_FOLDER)/$1/$1_config.o: $1/$1_config.c
 	@mkdir -p $$(dir $$@)
-	$$(CC) $$(CFLAGS) $$(DISABLE_VECTORISE) $$(BASE_INCLUDE) $$(CONFIG_INCLUDE) -c $$< -o $$@
+	$$(CC) $$(CFLAGS) $$(SIMD_LEVEL) $$(BASE_INCLUDE) $$(CONFIG_INCLUDE) -c $$< -o $$@
 endef
 
 # SIMD object rules per flag

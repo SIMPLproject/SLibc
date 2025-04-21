@@ -1,12 +1,12 @@
 #include <config.h>
 
-#define memmove _memmove
+#define memmove __memmove
 #include <string.h>
 #undef memmove
 
 #if defined(SHARED) && !defined(NATIVE)
 
-simpl_func_ifunc_init(_memmove, void *, IFUNC_AVX | IFUNC_SSE, void *, const void *, size_t)
+simpl_func_ifunc_init(__memmove, void *, IFUNC_AVX | IFUNC_SSE, void *, const void *, size_t)
 
 #else
 
@@ -15,4 +15,4 @@ simpl_func_ifunc_init(_memmove, void *, IFUNC_AVX | IFUNC_SSE, void *, const voi
 
 #endif
 
-simpl_weak_alias(memmove, _memmove)
+simpl_weak_alias(memmove, __memmove)

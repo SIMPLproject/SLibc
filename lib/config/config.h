@@ -14,13 +14,13 @@
 #endif
 
 #if defined(ARCHIVE) || defined(NATIVE)
-#    define ARCH_SYM(x) _##x
+#    define ARCH_SYM(x) __##x
 #elif defined(HAS_AVX)
-#    define ARCH_SYM(x) _##x##_avx
+#    define ARCH_SYM(x) __##x##_avx
 #elif defined(HAS_SSE)
-#    define ARCH_SYM(x) _##x##_sse
+#    define ARCH_SYM(x) __##x##_sse
 #else
-#    define ARCH_SYM(x) _##x##_generic
+#    define ARCH_SYM(x) __##x##_generic
 #endif
 
 /* to be remove from there this as noting to do there */

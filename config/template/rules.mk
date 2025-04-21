@@ -21,6 +21,8 @@ $(1) += $$(patsubst %.c,$$(BUILD_FOLDER)/%_archive.o,$$(__SRC_$(1)_CONFIG))
 $(1) += $$(patsubst %.c,$$(BUILD_FOLDER)/%_shared.o,$$(__SRC_$(1)_CONFIG))
 endef
 
+endif
+
 INCLUDE = $(BASE_INCLUDE) $(CONFIG_INCLUDE)
 
 define TEMPLATE_RULES
@@ -38,15 +40,15 @@ $(foreach flag,$(VERSION_FLAGS),\
 
 $(BUILD_FOLDER)/%_build_shared.o : %_build.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(DISABLE_VECTORISE) $(INCLUDE) -DSHARED -c $< -o $@
+	$(CC) $(CFLAGS) $(SIMD_LEVEL) $(INCLUDE) -DSHARED -c $< -o $@
 
 $(BUILD_FOLDER)/%_build_archive.o : %_build.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(DISABLE_VECTORISE) $(INCLUDE) -DARCHIVE -c $< -o $@
+	$(CC) $(CFLAGS) $(SIMD_LEVEL) $(INCLUDE) -DARCHIVE -c $< -o $@
 
 $(BUILD_FOLDER)/%.o: %.c
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(DISABLE_VECTORISE) $(INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) $(SIMD_LEVEL) $(INCLUDE) -c $< -o $@
 
 # $(1) lib name
 # $(2) lib build folder
@@ -68,4 +70,3 @@ $(2)/$(1).a: $$(OBJ_ARCHIVE_$(1))
 
 endef
 
-endif

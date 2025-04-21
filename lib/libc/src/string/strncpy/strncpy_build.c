@@ -1,11 +1,12 @@
 #include <config.h>
-#define strncpy _strncpy
+
+#define strncpy __strncpy
 #include <string.h>
 #undef strncpy
 
 #if defined(SHARED) && !defined(NATIVE)
 
-simpl_func_ifunc_init(_strncpy, char *, IFUNC_AVX | IFUNC_SSE, char *, const char *, size_t)  
+simpl_func_ifunc_init(__strncpy, char *, IFUNC_AVX | IFUNC_SSE, char *, const char *, size_t)  
 
 #else
 
@@ -14,4 +15,4 @@ simpl_func_ifunc_init(_strncpy, char *, IFUNC_AVX | IFUNC_SSE, char *, const cha
 
 #endif
 
-simpl_weak_alias(strncpy, _strncpy)
+simpl_weak_alias(strncpy, __strncpy)

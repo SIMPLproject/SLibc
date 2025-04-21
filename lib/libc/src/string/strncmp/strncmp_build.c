@@ -1,12 +1,12 @@
 #include <config.h>
 
-#define strncmp _strncmp
+#define strncmp __strncmp
 #include <string.h>
 #undef strncmp
 
 #if defined(SHARED) && !defined(NATIVE)
 
-simpl_func_ifunc_init(_strncmp, int, IFUNC_AVX | IFUNC_SSE, const char *, const char *, size_t)  
+simpl_func_ifunc_init(__strncmp, int, IFUNC_AVX | IFUNC_SSE, const char *, const char *, size_t)  
 
 #else
 
@@ -15,4 +15,4 @@ simpl_func_ifunc_init(_strncmp, int, IFUNC_AVX | IFUNC_SSE, const char *, const 
 
 #endif
 
-simpl_weak_alias(strncmp, _strncmp)
+simpl_weak_alias(strncmp, __strncmp)

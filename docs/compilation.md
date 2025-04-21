@@ -26,7 +26,7 @@ export CC
 export AR
 export AR_FLAGS
 export CFLAGS
-export DISABLE_VECTORISE
+export SIMD_LEVEL
 ```
 
 Each subdirectory Makefile is invoked with its own arguments for the build folder and archive name:

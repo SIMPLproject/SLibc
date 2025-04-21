@@ -1,12 +1,12 @@
 #include <config.h>
 
-#define strlen _strlen
+#define strlen __strlen
 #include <string.h>
 #undef strlen
 
 #if defined(SHARED) && !defined(NATIVE)
 
-simpl_func_ifunc_init(_strlen, size_t, IFUNC_AVX | IFUNC_SSE, const char *);
+simpl_func_ifunc_init(__strlen, size_t, IFUNC_AVX | IFUNC_SSE, const char *);
 
 #else
 
@@ -15,4 +15,4 @@ simpl_func_ifunc_init(_strlen, size_t, IFUNC_AVX | IFUNC_SSE, const char *);
 
 #endif
 
-simpl_weak_alias(strlen, _strlen)
+simpl_weak_alias(strlen, __strlen)

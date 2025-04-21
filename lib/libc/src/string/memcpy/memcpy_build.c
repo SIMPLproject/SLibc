@@ -1,12 +1,12 @@
 #include <config.h>
 
-#define memcpy _memcpy
+#define memcpy __memcpy
 #include <string.h>
 #undef memcpy
 
 #if defined(SHARED) && !defined(NATIVE)
 
-simpl_func_ifunc_init(_memcpy, void *, IFUNC_AVX | IFUNC_SSE, void *, const void *, size_t)
+simpl_func_ifunc_init(__memcpy, void *, IFUNC_AVX | IFUNC_SSE, void *, const void *, size_t)
 
 #else
 
@@ -15,4 +15,4 @@ simpl_func_ifunc_init(_memcpy, void *, IFUNC_AVX | IFUNC_SSE, void *, const void
 
 #endif
 
-simpl_weak_alias(memcpy, _memcpy)
+simpl_weak_alias(memcpy, __memcpy)
