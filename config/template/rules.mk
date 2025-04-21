@@ -1,10 +1,13 @@
 ifdef NATIVE
 
-ifeq ($(NATIVE),default)
+# $(1) obj_name
+# $(2) src
+define OBJ_RULES
+__SRC_$(1)_BASE := $$(filter-out %_simd.c,$(2))
 
-else
+$(1) = $$(patsubst %.c,$$(BUILD_FOLDER)/%.o,$$(__SRC_$(1)_BASE))
+endef
 
-endif
 
 else  # no NATIVE defined
 
@@ -45,6 +48,10 @@ $(BUILD_FOLDER)/%_build_shared.o : %_build.c
 $(BUILD_FOLDER)/%_build_archive.o : %_build.c
 	mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(SIMD_LEVEL) $(INCLUDE) -DARCHIVE -c $< -o $@
+
+$(BUILD_FOLDER)/%_build.o : %_build.c
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) $(SIMD_LEVEL) $(INCLUDE) -DNATIVE=$(NATIVE) -c $< -o $@
 
 $(BUILD_FOLDER)/%.o: %.c
 	mkdir -p $(@D)

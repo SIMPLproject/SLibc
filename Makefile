@@ -12,8 +12,13 @@ CC := clang
 AR = ar
 AR_FLAGS = 
 CFLAGS := -Wall -Wextra -O3 -MMD -MP -fPIC -g
-SIMD_LEVEL := -fno-tree-vectorize -fno-builtin -mno-sse -mno-avx
 VERSION_FLAGS := sse4 avx2
+
+ifdef NATIVE
+SIMD_LEVEL := -m$(NATIVE)
+else
+SIMD_LEVEL := -fno-tree-vectorize -fno-builtin -mno-sse -mno-avx
+endif
 
 # for the compile_commands.json
 CFLAGS += -nostdinc
