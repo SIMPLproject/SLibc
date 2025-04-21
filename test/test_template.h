@@ -4,21 +4,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define RESET   "\033[0m"
+
 #ifdef NO_TEST_EXIT
 #    define TEST_EXIT
 #else
 #    define TEST_EXIT exit(1);
 #endif
 
-#define TEST(description, func, cmp_res_func, ret, args...)                                        \
+#define TEST(description, func, cmp_res_func, expected, args...)                                   \
     {                                                                                              \
-        ft_printf("%s test %d [%s]: %s\t", __FILE__, __COUNTER__, #func, description);             \
-        if (cmp_res_func(ret, func(args)))                                                         \
+        int result = func(args);                                                                   \
+        if (cmp_res_func(expected, result))                                                        \
         {                                                                                          \
-            printf("pass\n");                                                                      \
+            printf(GREEN "[PASS]" RESET " %s => expected: %d, got: %d\n", description, expected,   \
+                   result);                                                                        \
         } else                                                                                     \
         {                                                                                          \
-            printf("error\n");                                                                     \
+            printf(RED "[FAIL]" RESET " %s => expected: %d, got: %d\n", description, expected,     \
+                   result);                                                                        \
             TEST_EXIT                                                                              \
         }                                                                                          \
     }

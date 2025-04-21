@@ -11,8 +11,13 @@ export MK_CONFIG
 CC := clang
 AR = ar
 AR_FLAGS = 
-CFLAGS := -Wall -Wextra -O3 -MMD -MP -fPIC -g
-VERSION_FLAGS := sse4 avx2
+CFLAGS = -Wall -Wextra -O0 -MMD -MP -fPIC -g 
+
+CFLAGS +=  -fno-stack-protector -fno-pie -mno-red-zone -nostdlib -ffreestanding
+
+VERSION_FLAGS = sse4 avx2
+
+SINGLE_THREAD = true
 
 ifdef NATIVE
 SIMD_LEVEL := -m$(NATIVE)
