@@ -3,7 +3,7 @@ ifdef NATIVE
 # $(1) obj_name
 # $(2) src
 define OBJ_RULES
-__SRC_$(1)_BASE := $$(filter-out %_simd.c,$(2))
+__SRC_$(1)_BASE := $$(filter-out %_generic.c %_simd.c,$(2))
 
 $(1) = $$(patsubst %.c,$$(BUILD_FOLDER)/%.o,$$(__SRC_$(1)_BASE))
 endef
@@ -67,7 +67,7 @@ $$(eval OBJ_SHARED_$(1) := $$(filter-out %_archive.o,$(3)))
 $$(eval OBJ_ARCHIVE_$(1) := $$(filter-out %_shared.o %_generic.o,$(3)))
 
 $(2)/$(1).so: $$(OBJ_SHARED_$(1))
-	$$(CC) -v -shared -Wl,-soname,$(1)  -Wl,-z,defs -Wl,--dynamic-linker=/lib64/ld-linux-x86-64.so.2 -nostdlib -o $$@ $$^  $$(LDFLAGS)
+	$$(CC) -v -shared -Wl,-soname,$(1).so  -Wl,-z,defs -nostdlib -o $$@ $$^  $$(LDFLAGS)
 
 $(2)/$(1).a: $$(OBJ_ARCHIVE_$(1))
 	$$(AR) rcs $$@ $$^

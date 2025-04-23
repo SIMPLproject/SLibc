@@ -11,7 +11,7 @@ export MK_CONFIG
 CC := clang
 AR = ar
 AR_FLAGS = 
-CFLAGS = -Wall -Wextra -O0 -MMD -MP -fPIC -g 
+CFLAGS = -Wall -Wextra -O0 -MMD -MP -fPIC -g   -gdwarf-2 -g3 
 
 CFLAGS +=  -fno-stack-protector  -mno-red-zone -nostdlib -ffreestanding
 
@@ -27,6 +27,10 @@ endif
 
 # for the compile_commands.json
 CFLAGS += -nostdinc
+
+ifeq ($(VERBOSE), true)
+	CFLAGS += -DVERBOSE
+endif
 
 CONFIG_INCLUDE := -I $(shell realpath lib/config)
 BASE_INCLUDE := -I $(BUILD_INCLUDE_FOLDER)

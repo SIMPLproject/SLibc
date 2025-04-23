@@ -6,9 +6,17 @@
 /*   By: babonnet <babonnet@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:39:57 by babonnet          #+#    #+#             */
-/*   Updated: 2025/04/21 17:41:32 by bonsthie         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:42:19 by babonnet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* 
+ * !!!!! WARNING !!!!!
+ *
+ * this is the worst printf you will see in your entire life need to be change 
+ *
+ * !!!!! WARNING !!!!!
+ * */
 
 #include "ft_printf.h"
 #include <config.h>

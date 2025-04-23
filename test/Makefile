@@ -9,4 +9,19 @@ compile :
 		-D NO_TEST_EXIT \
 		-o test_string
 
+
+LIBDIR     := $(realpath ../bin/lib)
+INCDIR     := $(realpath ../bin/include)
+DYN_LINKER := /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+
+ld:
+	clang -nostdlib -nostartfiles -g\
+		-fuse-ld=lld \
+		-o test \
+		-Wl,--enable-new-dtags \
+		-Wl,--rpath=$(LIBDIR) \
+		$(LIBDIR)/crt1.o test.c \
+		-L$(LIBDIR) -lc \
+		-I$(INCDIR)
+
 .PHONY: compile all
