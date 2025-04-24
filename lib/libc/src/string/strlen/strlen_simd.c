@@ -34,8 +34,6 @@ size_t ARCH_SYM(strlen)(const char *str)
         vec cmp_result = v32c_cmpeq(ymm_zero, ymm_data);
         int32_t mask = v32c_movemask(cmp_result);
 
-        mask >>= misalignment;
-
         if (mask != 0)
         {
             int32_t index = __builtin_ctz(mask);

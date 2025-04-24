@@ -1,6 +1,5 @@
 #include <stdint.h>
 #include <stddef.h>
-#include <stdarg.h>
 #include <sys/cdefs.h>
 #include <errno.h>
 
