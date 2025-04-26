@@ -8,5 +8,6 @@ pkgs.mkShell {
 		clang
 		bear
 		cloc
+		lld
 	];
 }

@@ -11,7 +11,7 @@ export MK_CONFIG
 CC := clang
 AR = ar
 AR_FLAGS = 
-CFLAGS = -Wall -Wextra -O0 -MMD -MP -fPIC -g   -gdwarf-2 -g3 
+CFLAGS = -Wall -Wextra -O0 -MMD -MP -fPIC -gdwarf-2 -g3 
 
 CFLAGS +=  -fno-stack-protector  -mno-red-zone -nostdlib -ffreestanding
 
@@ -101,14 +101,14 @@ build_libs: init_build include
 
 crt:  include $(BUILD_LIB_FOLDER)/crt1.o  $(BUILD_LIB_FOLDER)/crti.o  $(BUILD_LIB_FOLDER)/crtn.o 
 
-CRT_CFLAGS = -fno-pie -nostdlib
-$(BUILD_LIB_FOLDER)/crt1.o : crt/$(SYSTEM)/$(ARCH)/crt1.c
+CRT_CFLAGS = -nostdlib
+$(BUILD_LIB_FOLDER)/crt1.o : crt/$(SYSTEM)/$(ARCH)/crt1.S
 	$(CC) $(CRT_CFLAGS) -c $< -o $@
 
-$(BUILD_LIB_FOLDER)/crti.o : crt/$(SYSTEM)/$(ARCH)/crti.c
+$(BUILD_LIB_FOLDER)/crti.o : crt/$(SYSTEM)/$(ARCH)/crti.S
 	$(CC) $(CRT_CFLAGS) -c $< -o $@
 	
-$(BUILD_LIB_FOLDER)/crtn.o : crt/$(SYSTEM)/$(ARCH)/crtn.c
+$(BUILD_LIB_FOLDER)/crtn.o : crt/$(SYSTEM)/$(ARCH)/crtn.S
 	$(CC) $(CRT_CFLAGS) -c $< -o $@
 
 ##############################################################################################

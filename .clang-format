@@ -12,12 +12,12 @@ AllowAllConstructorInitializersOnNextLine: false
 BreakBeforeBraces: Custom
 
 BraceWrapping:
-  AfterFunction: true          # Place opening brace on a new line after functions
-  SplitEmptyFunction: false    # Keep empty functions on a single line
-  AfterClass: true             # Place opening brace on a new line after classes
-  AfterNamespace: true         # Place opening brace on a new line after namespaces
-  AfterControlStatement: true  # Place opening brace on a new line after control statements
-  SplitEmptyRecord: false      # Keep empty classes/structs on a single line
+  AfterFunction: true
+  SplitEmptyFunction: false
+  AfterClass: true
+  AfterNamespace: true
+  AfterControlStatement: true
+  SplitEmptyRecord: false
 
 # Indent preprocessor directives after the hash symbol
 IndentPPDirectives: AfterHash
