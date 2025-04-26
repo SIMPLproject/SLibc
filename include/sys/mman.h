@@ -1,5 +1,5 @@
-#ifndef MMAN_H
-# define MMAN_H
+#ifndef __SYS_MMAN_H__
+# define __SYS_MMAN_H__
 
 
 /* void	*ft_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset); */
@@ -15,4 +15,4 @@
 # define MAP_ANONYMOUS 0x20
 #define MAP_FAILED        ((void *) -1)
 
-#endif /* MMAN_H */
+#endif /* __SYS_MMAN_H__ */

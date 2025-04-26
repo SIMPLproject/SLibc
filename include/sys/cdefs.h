@@ -6,56 +6,58 @@
 
 /* Compiler-specific attributes for alignment and inline functions */
 #if defined(__clang__) || defined(__GNUC__)
-# define _ALIGN(N) __attribute__((aligned(N)))
-# define __Inline __attribute__((always_inline)) inline
+#    define _ALIGN(N) __attribute__((aligned(N)))
+#    define __Inline __attribute__((always_inline)) inline
 #elif defined(_MSC_VER)
-# define __Inline __forceinline
-# define _ALIGN(N)
+#    define __Inline __forceinline
+#    define _ALIGN(N)
 #else
-# define __Inline inline
-# define _ALIGN(N)
+#    define __Inline inline
+#    define _ALIGN(N)
 #endif
 
-#if defined (__GNUC__) || defined (__clang__)
-#	undef __nonnull
-#	define __nonnull(...) __attribute__ ((__nonnull__ (__VA_ARGS__)))
+#if defined(__GNUC__) || defined(__clang__)
+#    undef __nonnull
+#    define __nonnull(...) __attribute__((__nonnull__(__VA_ARGS__)))
 #else
-#	define __nonnull(...)
+#    define __nonnull(...)
 #endif
 
-#if defined (__GNUC__) || defined (__clang__)
-# undef __attribute_pure__
-# define __attribute_pure__ __attribute__ ((__pure__))
+#if defined(__GNUC__) || defined(__clang__)
+#    undef __attribute_pure__
+#    define __attribute_pure__ __attribute__((__pure__))
 #else
-# define __attribute_pure__ /* Ignore */
+#    define __attribute_pure__ /* Ignore */
 #endif
 
 #if defined(__linux__)
-#define __unused __attribute__((unused))
+#    define __unused __attribute__((unused))
 #else
-#define __unused
+#    define __unused
 #endif
 
-
-#if SHARED
-# define simpl_hidden_def(name) \
-	__asm__(".hidden " ## #name) __attribute__((hidden))
-# define simpl_hidden_proto(name)
+#if defined(__linux__)
+#    define __no_return __attribute__((noreturn))
 #else
-# define simpl_hidden_def(name)
-# define simpl_hidden_proto(name)
+#    define __no_return
 #endif
-
 
 #if defined(__APPLE__)
-#define simpl_weak_alias(func, func_source) \
-    __typeof__(func_source) __attribute__((weak)) *func = &func_source;
+#    define simpl_weak_alias(func, func_source)                                                    \
+        __typeof__(func_source) __attribute__((weak)) *func = &func_source;
 #elif defined(__GNUC__) || defined(__clang__)
-#define simpl_weak_alias(func, func_source) \
-    extern __typeof__(func_source) func __attribute__((weak, alias(STRINGIFY(func_source))));
+#    define simpl_weak_alias(func, func_source)                                                    \
+        extern __typeof__(func_source) func __attribute__((weak, alias(STRINGIFY(func_source))));
 #else
-#define simpl_weak_alias(name, func)                                           \
-  _Pragma("GCC error \"Weak alias is not supported on this compiler\"")
+#    define simpl_weak_alias(name, func)                                                           \
+        _Pragma("GCC error \"Weak alias is not supported on this compiler\"")
+#endif
+
+#if defined(__linux__)
+#    define simpl_strong_alias(func, func_source)                                                  \
+        extern __typeof__(func_source) func __attribute__((alias(STRINGIFY(func_source))));
+#else
+#    define simpl_strong_alias(x, x)
 #endif
 
 #endif /* __CDEFS_H__ */

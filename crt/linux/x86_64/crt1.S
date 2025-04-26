@@ -43,7 +43,6 @@ _start:
 	andq $-16, %rsp /* align the stack on 16 */
 	sub $8, %rsp /* make it 8-aligned before call (ABI rule) */
 
-
 	pushq %rax
 	pushq %rsp
 	

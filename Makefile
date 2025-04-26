@@ -8,6 +8,8 @@ export MK_CONFIG
 
 # to rm in config folder
 ##############################################################################################
+
+
 CC := clang
 AR = ar
 AR_FLAGS = 
@@ -46,6 +48,8 @@ export BASE_INCLUDE
 export CONFIG_INCLUDE
 export SYSTEM
 export ARCH
+
+
 ##############################################################################################
 
 LIBS_SRC = $(addprefix lib/,$($(LIBS)_NAME))
@@ -81,16 +85,17 @@ include: init_build
 $(info LIBS = $(LIBS))
 
 # $(1) lib name
-define build_archive
-	echo $(1)
+define build_lib
+	@echo building : $(1)
 	$(MAKE) -C lib/$(1) \
 		BUILD_FOLDER="$(BUILD_OBJ_FOLDER)/$(1)" \
 		LIB_FOLDER="$(BUILD_LIB_FOLDER)" \
 		NAME="$(1)"
+	@echo end of building $(1)
 endef
 
 build_libs: init_build include
-	$(foreach lib,$(LIBS), $(call build_archive,$($(lib)_NAME)))
+	$(foreach lib,$(LIBS), $(call build_lib,$($(lib)_NAME)))
 
 ##############################################################################################
 

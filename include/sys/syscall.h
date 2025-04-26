@@ -1,5 +1,5 @@
-#ifndef __SYSCALL_H__
-#define __SYSCALL_H__
+#ifndef __SYS_SYSCALL_H__
+#define __SYS_SYSCALL_H__
 
 #include <bits/syscall_table.h>
 
@@ -2117,4 +2117,4 @@
 #    define SYS_process_madvise __MISC
 #endif
 
-#endif /* __SYSCALL_H__ */
+#endif /* __SYS_SYSCALL_H__ */
