@@ -2,12 +2,12 @@
 	_start : just call the real start of the linker _dl_start
 */
 
-#include <start.h>
-
 .text
 .globl _start
 .type _start, @function
 .align 16
+
+.extern _ld_start
 
 _start:
 	.cfi_startproc
@@ -17,7 +17,7 @@ _start:
 	andq $-16, %rsp /* align the stack on 16 */
 	sub $8, %rsp /* make it 8-aligned before call (ABI rule) */
 
-	call SIMPL_INTERNAL_SYMBOL(_dl_start)
+	call _ld_start
 	call *%rax       /* jump to user entry */
 	hlt
     .cfi_endproc

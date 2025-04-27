@@ -12,6 +12,8 @@ SRC += $(SYSDEPS_SRC)
 
 INCLUDE_FOLDER = -I include
 
+
+CFLAGS += -Bsymbolic
 CFLAGS += $(INCLUDE_FOLDER)
 
 $(eval $(call OBJ_RULES,OBJ,$(SRC)))

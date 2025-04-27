@@ -12,7 +12,7 @@ compile :
 
 LIBDIR     := $(realpath ../bin/lib)
 INCDIR     := $(realpath ../bin/include)
-DYN_LINKER := /nfs/homes/babonnet/sgoinfre/glibc_out/lib/ld-linux-x86-64.so.2
+DYN_LINKER := ../bin/lib/ld.so
 
 ld:
 	clang -nostdlib -nostartfiles -g\
