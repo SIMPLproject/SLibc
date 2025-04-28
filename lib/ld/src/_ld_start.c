@@ -5,7 +5,8 @@
 void _ld_start(void *arg)
 {
 	char *str;
-	str = malloc(strlen((char *)arg));
+	str = __malloc(strlen("test"));
+	str = malloc(strlen(("test")));
     while (1)
     {
         arg += 1;

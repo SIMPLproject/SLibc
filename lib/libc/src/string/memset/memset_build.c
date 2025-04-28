@@ -1,10 +1,6 @@
 #include <config.h>
 #include <sys/symbols.h>
 
-#ifdef HAS_AVX
-#warning "rewrerewkqjhrejhkwrejhkrweqjkhwreqjhklwreqjhkwreq"
-#endif
-
 #if defined(SHARED) && !defined(NATIVE)
 
 simpl_func_ifunc_init(__memset, void *, IFUNC_AVX | IFUNC_ERMS, void *, int c, size_t)

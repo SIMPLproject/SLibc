@@ -2,7 +2,10 @@
 #include <stdint.h>
 #include <stdio.h>
 
-simd_support_t simd_support = {0};
+simd_support_t simd_support = {
+	// debug
+	.avx = 1
+};
 
 static simd_support_t detect_cpu_features() {
   uint32_t eax, ebx, ecx, edx;

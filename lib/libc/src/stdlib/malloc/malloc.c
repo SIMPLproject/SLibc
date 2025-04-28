@@ -1,6 +1,5 @@
-#define malloc _malloc
+#define SHARED
 #include <stdlib.h>
-#undef malloc
 
 #include "malloc.h"
 #include "config.h"
@@ -14,7 +13,7 @@ int freed_blocks = 0;
 Block *bins[BIN_COUNT] = {NULL};
 Block *is_mmap = NULL;
 
-void *__malloc(size_t size) {
+void *__slibc_malloc(size_t size) {
     if (__builtin_expect(size == 0, 0))
         return NULL;
     size = ALIGN(size, ALIGNMENT);
@@ -113,5 +112,5 @@ void *_aligned_alloc(size_t alignment, size_t size) {
 }
 
 
-libc_hidden_def(malloc)
-simpl_weak_alias(malloc, __malloc)
+libc_hidden_alias(__malloc, __slibc_malloc)
+simpl_weak_alias(malloc, __slibc_malloc)

@@ -78,7 +78,7 @@ compile_lib_shared : $(2)/$(1).so
 $$(eval OBJ_SHARED_$(1) := $$(filter-out %_archive.o,$(3)))
 
 $(2)/$(1).so: $$(OBJ_SHARED_$(1))
-	$$(CC) -shared -Wl,-soname,$(1).so -nostdlib -o $$@ $(__DEPENDENCY_LIB) $$^  $$(LDFLAGS)
+	$$(CC) -shared -Wl,-zifunc-noplt -Wl,-soname,$(1).so -nostdlib -o $$@ $(__DEPENDENCY_LIB) $$^  $$(LDFLAGS)
 endef
 
 # $(1) lib name
@@ -92,4 +92,3 @@ $(2)/$(1).a: $$(OBJ_ARCHIVE_$(1))
 	$$(AR) rcs $$@  $$^
 
 endef
-

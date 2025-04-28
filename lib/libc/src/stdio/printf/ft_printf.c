@@ -6,7 +6,7 @@
 /*   By: babonnet <babonnet@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:39:57 by babonnet          #+#    #+#             */
-/*   Updated: 2025/04/22 12:42:19 by babonnet         ###   ########.fr       */
+/*   Updated: 2025/04/28 19:24:26 by babonnet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
  * */
 
 #include "ft_printf.h"
+#include <sys/symbols.h>
 #include <config.h>
 #include <stdlib.h>
 
@@ -77,5 +78,8 @@ int ft_printf(const char *format, ...)
 
 simpl_weak_alias(printf, ft_printf)
 simpl_weak_alias(__printf_chk, ft_printf)
+libc_hidden_alias(__printf_chk, ft_printf)
+libc_hidden_alias(printf, ft_printf)
+
 
 

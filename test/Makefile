@@ -20,7 +20,6 @@ ld:
 		-o test \
 		-Wl,--enable-new-dtags \
 		-Wl,--rpath=$(LIBDIR) \
-		-Wl,--dynamic-linker=$(DYN_LINKER) \
 		$(LIBDIR)/crt1.o test.c \
 		-L$(LIBDIR) -lc \
 		-I$(INCDIR)

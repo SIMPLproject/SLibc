@@ -1,3 +1,4 @@
+#include <sys/symbols.h>
 #include <config.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -8,3 +9,4 @@ ssize_t __write(int fildes, const void *buf, size_t nbyte) {
 }
 
 simpl_weak_alias(write, __write)
+libc_hidden_alias(write, __write)

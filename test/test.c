@@ -13,7 +13,7 @@ int test(char *str) {
 }
 
 int main(int ac, char **av) {
-	printf("ac %d\n", ac);
+	printf("%s ac %d\n", av[0], ac);
 	if (ac < 3)
 		return 4;
 
