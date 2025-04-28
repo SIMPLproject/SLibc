@@ -78,9 +78,9 @@ void split_block(Block *block, size_t size, size_t alignment);
 void *request_space_mmap(size_t size, size_t alignment);
 Block *request_space_sbrk(Block *last, size_t size, size_t alignment);
 void check_alignment(void *aligned_address);
-void *_malloc(size_t size);
+void *malloc(size_t size);
 void *_aligned_alloc(size_t alignment, size_t size);
-void _free(void *ptr);
+void free(void *ptr);
 
 /* memory leak detection and utils */
 

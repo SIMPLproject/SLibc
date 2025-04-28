@@ -1,8 +1,5 @@
 #include <config.h>
-
-#define memset __memset
-#include <string.h>
-#undef memset
+#include <sys/symbols.h>
 
 #ifdef HAS_AVX
 #warning "rewrerewkqjhrejhkwrejhkrweqjkhwreqjhklwreqjhkwreq"
@@ -19,4 +16,5 @@ simpl_func_ifunc_init(__memset, void *, IFUNC_AVX | IFUNC_ERMS, void *, int c, s
 
 #endif
 
+libc_hidden_alias(memset, __memset)
 simpl_weak_alias(memset, __memset)

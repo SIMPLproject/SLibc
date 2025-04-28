@@ -33,7 +33,7 @@ _start:
 	xorl %ebp, %ebp /* clear stack pointer (don't need to clear the entire register) */
 
 	/* args for __libc_start_main */
-	movq %rdx, %r9 /* for the ld_fini when starting form the dynamic loader */
+	movq %rdx, %r9 /* for the ld_fini when starting form the dynamic loader (default ABI rule)*/
 	leaq main(%rip), %rdi	/* main */
 	popq %rsi				/* argc */
 	movq %rsp, %rdx			/* argv */

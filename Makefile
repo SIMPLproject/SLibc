@@ -9,7 +9,6 @@ export MK_CONFIG
 # to rm in config folder
 ##############################################################################################
 
-
 CC := clang
 AR = ar
 AR_FLAGS = 
@@ -34,9 +33,14 @@ ifeq ($(VERBOSE), true)
 	CFLAGS += -DVERBOSE
 endif
 
+ifdef LIB
+LIBS = $(LIB)
+endif
+
 CONFIG_INCLUDE := -I $(shell realpath lib/config)
 BASE_INCLUDE := -I $(BUILD_INCLUDE_FOLDER)
-$(info include $(BUILD_INCLUDE_FOLDER))
+
+CFLAGS += -DIN_libc
 
 export CC
 export AR
@@ -46,14 +50,15 @@ export SIMD_LEVEL
 export VERSION_FLAGS
 export BASE_INCLUDE
 export CONFIG_INCLUDE
+export BUILD_LIB_FOLDER
 export SYSTEM
 export ARCH
+
 
 
 ##############################################################################################
 
 LIBS_SRC = $(addprefix lib/,$($(LIBS)_NAME))
-$(info $(SYSDEPS_BITS))
 
 all : init_build include crt  custom_clang build_libs
 
@@ -64,6 +69,7 @@ SYSDEPS_BITS = $(shell find $(LIBS_SRC) -type d -wholename '*/sysdeps/$(SYSTEM)/
 
 init_build: 
 	mkdir -p $(BUILD_FOLDER)
+	rm -rf $(BUILD_INCLUDE_FOLDER)
 	mkdir -p $(BUILD_INCLUDE_FOLDER)/bits
 	mkdir -p $(BUILD_LIB_FOLDER)
 	mkdir -p $(BUILD_OBJ_FOLDER)
@@ -82,12 +88,11 @@ include: init_build
 # build lib
 ##############################################################################################
 # all lib settings are in config/lib.mk
-$(info LIBS = $(LIBS))
 
 # $(1) lib name
 define build_lib
 	@echo building : $(1)
-	$(MAKE) -C lib/$(1) \
+	@$(MAKE) -C lib/$(1) \
 		BUILD_FOLDER="$(BUILD_OBJ_FOLDER)/$(1)" \
 		LIB_FOLDER="$(BUILD_LIB_FOLDER)" \
 		NAME="$(1)"
@@ -136,13 +141,21 @@ custom_clang : init_build
 
 # utils 
 ##############################################################################################
-clean:
-	rm -rf $(BUILD_OBJ_FOLDER)
+# $(1) lib name
+define clean_lib
+	@echo cleanning : $(1)
+	rm -rf $(BUILD_LIB_FOLDER)/$(1)
+	rm -rf $(BUILD_OBJ_FOLDER)/$(1)
+	@echo end of cleanning $(1)
+endef
+
+clean: 
+	$(foreach lib,$(LIBS), $(call clean_lib,$($(lib)_NAME)))
 
 fclean:
 	rm -rf $(BUILD_FOLDER)
 
-re: fclean all
+re: clean all
 
 .PHONY: all clean fclean re init_build include
 ##############################################################################################

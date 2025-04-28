@@ -1,8 +1,5 @@
 #include <config.h>
-
-#define strchr __strchr
-#include <string.h>
-#undef strchr
+#include <sys/symbols.h>
 
 #if defined(SHARED) && !defined(NATIVE)
 
@@ -15,4 +12,5 @@ simpl_func_ifunc_init(__strchr, char *, IFUNC_AVX | IFUNC_SSE, const char *, int
 
 #endif
 
+libc_hidden_alias(strchr, __strchr)
 simpl_weak_alias(strchr, __strchr)

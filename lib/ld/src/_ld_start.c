@@ -1,15 +1,15 @@
-#include "sys/cdefs.h"
-#include <sys/symbols.h>
+#include <string.h>
+#include <sys/cdefs.h>
+#include <stdlib.h>
 
-void __ld_start(void *arg)
+void _ld_start(void *arg)
 {
+	char *str;
+	str = malloc(strlen((char *)arg));
     while (1)
     {
         arg += 1;
     }
-	(void)arg;
+	(void)str;
+    (void)arg;
 }
-
-simpl_weak_alias(_ld_start, __ld_start)
-
-simpl_hidden_proto(_ld_start)

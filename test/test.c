@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 int test(char *str) {
@@ -15,5 +16,8 @@ int main(int ac, char **av) {
 	printf("ac %d\n", ac);
 	if (ac < 3)
 		return 4;
-	return test(av[1]);
+
+	char *str = malloc(test(av[1]));
+	memcpy(str, av[1], strlen(av[1]));
+	return *str;
 }

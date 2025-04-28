@@ -1,8 +1,5 @@
 #include <config.h>
-
-#define strncmp __strncmp
-#include <string.h>
-#undef strncmp
+#include <sys/symbols.h>
 
 #if defined(SHARED) && !defined(NATIVE)
 
@@ -15,4 +12,5 @@ simpl_func_ifunc_init(__strncmp, int, IFUNC_AVX | IFUNC_SSE, const char *, const
 
 #endif
 
+libc_hidden_alias(strncmp, __strncmp)
 simpl_weak_alias(strncmp, __strncmp)

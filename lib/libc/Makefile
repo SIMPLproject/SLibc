@@ -7,7 +7,6 @@ all: compile_lib_shared compile_lib_archive
 $(eval $(call GET_SRC_SYSDEPS,sysdeps,SYSDEPS_SRC))
 
 # Debug info (after eval!)
-$(info sysdeps src $(SYSDEPS_SRC))
 
 SRC_FOLDER = src csu
 SRC := $(shell find $(SRC_FOLDER) -name '*.c')

@@ -9,9 +9,11 @@
 #define NULL (void *)0
 #endif
 #include <stddef.h>
+#include <sys/symbols.h>
 
 void exit(int status);
 
-void *_malloc(size_t size);
-void _free(void *ptr);
+void *malloc(size_t size);
+libc_hidden_proto(malloc);
+void free(void *ptr);
 #endif // __STDLIB_H__

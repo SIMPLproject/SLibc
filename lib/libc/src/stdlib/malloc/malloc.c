@@ -1,6 +1,11 @@
+#define malloc _malloc
+#include <stdlib.h>
+#undef malloc
+
 #include "malloc.h"
 #include "config.h"
-#include <stdlib.h>
+
+#include <sys/symbols.h>
 
 
 Block *freelist = NULL;
@@ -9,7 +14,7 @@ int freed_blocks = 0;
 Block *bins[BIN_COUNT] = {NULL};
 Block *is_mmap = NULL;
 
-void *_malloc(size_t size) {
+void *__malloc(size_t size) {
     if (__builtin_expect(size == 0, 0))
         return NULL;
     size = ALIGN(size, ALIGNMENT);
@@ -108,4 +113,5 @@ void *_aligned_alloc(size_t alignment, size_t size) {
 }
 
 
-simpl_weak_alias(malloc, _malloc)
+libc_hidden_def(malloc)
+simpl_weak_alias(malloc, __malloc)

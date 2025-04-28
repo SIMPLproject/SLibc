@@ -6,12 +6,13 @@
 /*   By: babonnet <babonnet@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:39:47 by babonnet          #+#    #+#             */
-/*   Updated: 2024/09/26 19:08:39 by babonnet         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:15:14 by babonnet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include <stdlib.h>
+#include <string.h>
 
 void ft_putnbr_base(unsigned long n, char *base, unsigned long base_size, int *count)
 {
@@ -92,7 +93,7 @@ int manage_char(va_list var, const char type)
 	if (str == NULL)
 		str = "(null)";
 	ft_putstr_fd(str, 1);
-	return (ft_strlen(str));
+	return (strlen(str));
 }
 
 int display_wrong_flag(char c)
