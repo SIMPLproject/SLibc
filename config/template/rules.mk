@@ -66,7 +66,9 @@ $(BUILD_FOLDER)/%.o: %.S
 	$(CC) $(CFLAGS) $(SIMD_LEVEL) $(INCLUDE) -c $< -o $@
 
 
+ifdef DEPENDENCY_LIB
 __DEPENDENCY_LIB  = -Wl,--whole-archive  $(foreach lib,$(DEPENDENCY_LIB), $(BUILD_LIB_FOLDER)/$($(lib)_NAME).a )
+endif
 
 
 # $(1) lib name
@@ -78,7 +80,7 @@ compile_lib_shared : $(2)/$(1).so
 $$(eval OBJ_SHARED_$(1) := $$(filter-out %_archive.o,$(3)))
 
 $(2)/$(1).so: $$(OBJ_SHARED_$(1))
-	$$(CC) -shared -Wl,-zifunc-noplt -Wl,-soname,$(1).so -nostdlib -o $$@ $(__DEPENDENCY_LIB) $$^  $$(LDFLAGS)
+	$$(CC) -shared -Wl,-soname,$(1).so -nostdlib -o $$@ $(__DEPENDENCY_LIB) $$^  $$(LDFLAGS)
 endef
 
 # $(1) lib name

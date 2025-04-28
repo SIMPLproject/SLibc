@@ -1,4 +1,4 @@
-#include "sys/symbols.h"
+#include <sys/symbols.h>
 #include <config.h>
 #include <stdarg.h>
 
