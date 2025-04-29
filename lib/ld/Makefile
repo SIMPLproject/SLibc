@@ -14,9 +14,8 @@ SRC += $(SYSDEPS_SRC)
 
 
 INCLUDE_FOLDER = -I include
+INCLUDE_FOLDER += -I sysdeps/$(SYSTEM)/$(ARCH)
 
-
-CFLAGS += -fvisibility=hidden
 CFLAGS += $(INCLUDE_FOLDER)
 
 $(eval $(call OBJ_RULES,OBJ,$(SRC)))

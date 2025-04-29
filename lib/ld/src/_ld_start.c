@@ -1,16 +1,10 @@
-#include <string.h>
-#include <sys/cdefs.h>
-#include <stdlib.h>
+#include "link.h"
+#include <stdio.h>
+#include <machine.h>
 
 void _ld_start(void *arg)
 {
-	char *str;
-	str = __malloc(strlen("test"));
-	str = malloc(strlen(("test")));
-    while (1)
-    {
-        arg += 1;
-    }
-	(void)str;
+	ElfW(Ehdr) *hdr = (ElfW(Ehdr *))elf_machine_load_address();
+	printf("[%p] %s\n", hdr, hdr->e_ident);
     (void)arg;
 }

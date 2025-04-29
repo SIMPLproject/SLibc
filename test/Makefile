@@ -13,6 +13,7 @@ compile :
 LIBDIR     := $(realpath ../bin/lib)
 INCDIR     := $(realpath ../bin/include)
 DYN_LINKER := ../bin/lib/ld.so
+# DYN_LINKER := /nfs/homes/babonnet/sgoinfre/glibc_out/lib/ld-linux-x86-64.so.2
 
 ld:
 	clang -nostdlib -nostartfiles -g\
@@ -20,6 +21,7 @@ ld:
 		-o test \
 		-Wl,--enable-new-dtags \
 		-Wl,--rpath=$(LIBDIR) \
+		-Wl,--dynamic-linker=$(DYN_LINKER) \
 		$(LIBDIR)/crt1.o test.c \
 		-L$(LIBDIR) -lc \
 		-I$(INCDIR)
