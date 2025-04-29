@@ -37,4 +37,3 @@ memcpy_build.c     // IFUNC/dispatch setup to choose the best version
 ```
 
 This structure keeps SIMPL clean, predictable, and easy to extend with additional architectures or optimization strategies.
-
