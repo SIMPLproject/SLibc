@@ -4,10 +4,10 @@
 #include <link.h>
 #include <sys/cdefs.h>
 
-static inline ElfW(Addr) elf_machine_load_address(void)
+static inline const ElfW(Ehdr) *get_main_prgm_hdr(void)
 {
     extern const ElfW(Ehdr) __ehdr_start __hidden;
-    return (ElfW(Addr)) & __ehdr_start;
+    return & __ehdr_start;
 }
 
 #include <__bits/machine.h>

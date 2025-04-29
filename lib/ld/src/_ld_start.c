@@ -1,10 +1,12 @@
 #include "link.h"
+#include "sys/symbols.h"
 #include <stdio.h>
 #include <machine.h>
 
 void _ld_start(void *arg)
 {
-	ElfW(Ehdr) *hdr = (ElfW(Ehdr *))elf_machine_load_address();
+	const ElfW(Ehdr) *hdr = get_main_prgm_hdr();
 	printf("[%p] %s\n", hdr, hdr->e_ident);
     (void)arg;
 }
+

@@ -63,11 +63,11 @@ $(BUILD_FOLDER)/%.o: %.c
 
 $(BUILD_FOLDER)/%.o: %.S
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(SIMD_LEVEL) $(INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 
 ifdef DEPENDENCY_LIB
-__DEPENDENCY_LIB  = -Wl,--whole-archive  $(foreach lib,$(DEPENDENCY_LIB), $(BUILD_LIB_FOLDER)/$($(lib)_NAME).a )
+__DEPENDENCY_LIB  = $(foreach lib,$(DEPENDENCY_LIB), $(BUILD_LIB_FOLDER)/$($(lib)_NAME).a )
 endif
 
 
@@ -80,7 +80,8 @@ compile_lib_shared : $(2)/$(1).so
 $$(eval OBJ_SHARED_$(1) := $$(filter-out %_archive.o,$(3)))
 
 $(2)/$(1).so: $$(OBJ_SHARED_$(1))
-	$$(CC) -shared -Wl,-soname,$(1).so -nostdlib -o $$@ $(__DEPENDENCY_LIB) $$^  $$(LDFLAGS)
+	$$(CC) -shared -Wl,-soname,$(1).so -nostdlib  -ffunction-sections -fdata-sections -o $$@  $$^ -Wl,--gc-sections -Wl,--as-needed $(__DEPENDENCY_LIB)
+	# strip --strip-unneeded $$@
 endef
 
 # $(1) lib name
