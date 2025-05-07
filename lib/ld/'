@@ -1,9 +1,0 @@
-#ifndef __AUXV_H__
-#define __AUXV_H__
-
-#include <sys/cdefs.h>
-#include <link.h>
-
-const ElfW(Ehdr) *get_main_prgm_hdr_from_auxv(void *arg) __hidden;
-
-#endif /* __AUXV_H__ */

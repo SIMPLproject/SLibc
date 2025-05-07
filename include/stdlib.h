@@ -12,6 +12,7 @@
 #include <sys/symbols.h>
 
 void exit(int status);
+libc_hidden_proto(exit);
 
 void *malloc(size_t size);
 

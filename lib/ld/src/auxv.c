@@ -10,7 +10,7 @@ const ElfW(Ehdr) * get_main_prgm_hdr_from_auxv(void *argv)
     {
         if (auxv->a_type == AT_PHDR)
         {
-            return (ElfW(Ehdr) *)auxv->a_un.a_val;
+            return (ElfW(Ehdr) *)auxv->a_un.a_val - 1;
         }
         auxv++;
     }
