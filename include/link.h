@@ -12,4 +12,6 @@
 
 typedef uint32_t Elf_Symndx;
 
+typedef ElfW(auxv_t) Elf_auxv_t;
+
 #endif /* __LINK_H__ */

@@ -15,10 +15,11 @@
 _start:
 	.cfi_startproc
 	.cfi_undefined %rip /* tells debuggers that this function has no caller */
-	xorl %ebp, %ebp /* clear stack pointer (don't need to clear the entire register) */
 
-	call _ld_start
+	lea     8(%rsp), %rdi	/* argv */
 
-	call *%rax       /* jump to user entry */
+	call	_ld_start
+
+	call	*%rax			/* jump to user entry */
 	hlt
     .cfi_endproc
