@@ -36,6 +36,11 @@ typedef int32_t  Elf32_Sword; // 32-bit signed integer
 typedef uint32_t Elf32_Addr;  // 32-bit virtual address
 typedef uint32_t Elf32_Off;   // 32-bit file offset
 
+
+// Type of addresses
+typedef uint32_t Elf32_Addr;
+typedef uint64_t Elf64_Addr;
+
 //////////////////////////////////////////////////////////////
 ///				64-BIT ELF HEADER
 //////////////////////////////////////////////////////////////
@@ -367,6 +372,57 @@ typedef enum {
     SHF_EXECINSTR32 = 0x4 // Executable
 } Elf32_ShFlags;
 
+//////////////////////////////////////////////////////////////
+///					Dynamic Entries
+//////////////////////////////////////////////////////////////
+
+typedef struct {
+    Elf32_Sword d_tag;
+    union {
+        Elf32_Word d_val;
+        Elf32_Addr d_ptr;
+    } d_un;
+} Elf32_Dyn;
+
+typedef struct {
+    Elf64_Sxword d_tag;
+    union {
+        Elf64_Xword d_val;
+        Elf64_Addr  d_ptr;
+    } d_un;
+} Elf64_Dyn;
+
+typedef enum {
+    DT_NULL = 0,      // end of dynamic section
+    DT_NEEDED = 1,    // name of needed library
+    DT_PLTRELSZ = 2,  // size of PLT relocations
+    DT_PLTGOT = 3,    // address of PLT/GOT
+    DT_HASH = 4,      // address of symbol hash table
+    DT_STRTAB = 5,    // address of string table
+    DT_SYMTAB = 6,    // address of symbol table
+    DT_RELA = 7,      // address of Rela relocations
+    DT_RELASZ = 8,    // size of Rela relocations
+    DT_RELAENT = 9,   // size of one Rela relocation
+    DT_STRSZ = 10,    // size of string table
+    DT_SYMENT = 11,   // size of one symbol table entry
+    DT_INIT = 12,     // address of init function
+    DT_FINI = 13,     // address of fini function
+    DT_SONAME = 14,   // name of shared object
+    DT_RPATH = 15,    // library search path (deprecated)
+    DT_SYMBOLIC = 16, // start symbol search here
+    DT_REL = 17,      // address of Rel relocations
+    DT_RELSZ = 18,    // size of Rel relocations
+    DT_RELENT = 19,   // size of one Rel relocation
+    DT_PLTREL = 20,   // type of PLT relocation entries
+    DT_DEBUG = 21,    // unused, set to 0
+    DT_TEXTREL = 22,  // relocation might modify .text
+    DT_JMPREL = 23,   // address of PLT relocations
+} Elf_EDyn;
+
+//////////////////////////////////////////////////////////////
+///					AUXV (env auxiliary)
+//////////////////////////////////////////////////////////////
+
 typedef struct {
     uint32_t a_type;
     union {
@@ -380,65 +436,63 @@ typedef struct {
     } a_un;
 } Elf64_auxv_t;
 
-
 /* ELF auxiliary vector types (Elf32_auxv_t.a_type / Elf64_auxv_t.a_type) */
 
-#define AT_NULL              0   /* End of vector */
-#define AT_IGNORE            1   /* Entry should be ignored */
-#define AT_EXECFD            2   /* File descriptor of program to load */
-#define AT_PHDR              3   /* Pointer to program headers */
-#define AT_PHENT             4   /* Size of one program header entry */
-#define AT_PHNUM             5   /* Number of program header entries */
-#define AT_PAGESZ            6   /* System page size */
-#define AT_BASE              7   /* Base address of interpreter */
-#define AT_FLAGS             8   /* Flags (unused) */
-#define AT_ENTRY             9   /* Entry point of program */
-#define AT_NOTELF           10   /* Program is not an ELF file */
-#define AT_UID              11   /* Real user ID */
-#define AT_EUID             12   /* Effective user ID */
-#define AT_GID              13   /* Real group ID */
-#define AT_EGID             14   /* Effective group ID */
+#define AT_NULL 0    /* End of vector */
+#define AT_IGNORE 1  /* Entry should be ignored */
+#define AT_EXECFD 2  /* File descriptor of program to load */
+#define AT_PHDR 3    /* Pointer to program headers */
+#define AT_PHENT 4   /* Size of one program header entry */
+#define AT_PHNUM 5   /* Number of program header entries */
+#define AT_PAGESZ 6  /* System page size */
+#define AT_BASE 7    /* Base address of interpreter */
+#define AT_FLAGS 8   /* Flags (unused) */
+#define AT_ENTRY 9   /* Entry point of program */
+#define AT_NOTELF 10 /* Program is not an ELF file */
+#define AT_UID 11    /* Real user ID */
+#define AT_EUID 12   /* Effective user ID */
+#define AT_GID 13    /* Real group ID */
+#define AT_EGID 14   /* Effective group ID */
 
-#define AT_PLATFORM         15   /* String identifying CPU/OS platform */
-#define AT_HWCAP            16   /* CPU capabilities bitmask */
-#define AT_CLKTCK           17   /* Frequency of times() ticks per second */
+#define AT_PLATFORM 15 /* String identifying CPU/OS platform */
+#define AT_HWCAP 16    /* CPU capabilities bitmask */
+#define AT_CLKTCK 17   /* Frequency of times() ticks per second */
 
-#define AT_FPUCW            18   /* Initial FPU control word */
+#define AT_FPUCW 18 /* Initial FPU control word */
 
-#define AT_DCACHEBSIZE      19   /* Data cache block size */
-#define AT_ICACHEBSIZE      20   /* Instruction cache block size */
-#define AT_UCACHEBSIZE      21   /* Unified cache block size */
+#define AT_DCACHEBSIZE 19 /* Data cache block size */
+#define AT_ICACHEBSIZE 20 /* Instruction cache block size */
+#define AT_UCACHEBSIZE 21 /* Unified cache block size */
 
-#define AT_IGNOREPPC        22   /* Entry ignored on PowerPC */
+#define AT_IGNOREPPC 22 /* Entry ignored on PowerPC */
 
-#define AT_SECURE           23   /* Boolean: program is running in secure mode */
+#define AT_SECURE 23 /* Boolean: program is running in secure mode */
 
-#define AT_BASE_PLATFORM    24   /* Real platform name string */
+#define AT_BASE_PLATFORM 24 /* Real platform name string */
 
-#define AT_RANDOM           25   /* Address of 16 random bytes */
+#define AT_RANDOM 25 /* Address of 16 random bytes */
 
-#define AT_HWCAP2           26   /* Additional CPU capabilities */
+#define AT_HWCAP2 26 /* Additional CPU capabilities */
 
-#define AT_EXECFN           31   /* Filename of executed program */
+#define AT_EXECFN 31 /* Filename of executed program */
 
-#define AT_SYSINFO          32   /* Pointer to vDSO/system-call page */
-#define AT_SYSINFO_EHDR     33   /* Address of vDSO ELF header */
+#define AT_SYSINFO 32      /* Pointer to vDSO/system-call page */
+#define AT_SYSINFO_EHDR 33 /* Address of vDSO ELF header */
 
-#define AT_L1I_CACHESHAPE   34   /* Encoded shape of L1 instruction cache */
-#define AT_L1D_CACHESHAPE   35   /* Encoded shape of L1 data cache */
-#define AT_L2_CACHESHAPE    36   /* Encoded shape of L2 cache */
-#define AT_L3_CACHESHAPE    37   /* Encoded shape of L3 cache */
+#define AT_L1I_CACHESHAPE 34 /* Encoded shape of L1 instruction cache */
+#define AT_L1D_CACHESHAPE 35 /* Encoded shape of L1 data cache */
+#define AT_L2_CACHESHAPE 36  /* Encoded shape of L2 cache */
+#define AT_L3_CACHESHAPE 37  /* Encoded shape of L3 cache */
 
-#define AT_L1I_CACHESIZE    40   /* Size of L1 instruction cache (bytes) */
-#define AT_L1I_CACHEGEOMETRY 41  /* Encoded geometry of L1 I-cache */
-#define AT_L1D_CACHESIZE    42   /* Size of L1 data cache (bytes) */
-#define AT_L1D_CACHEGEOMETRY 43  /* Encoded geometry of L1 D-cache */
-#define AT_L2_CACHESIZE     44   /* Size of L2 cache (bytes) */
-#define AT_L2_CACHEGEOMETRY 45   /* Encoded geometry of L2 cache */
-#define AT_L3_CACHESIZE     46   /* Size of L3 cache (bytes) */
-#define AT_L3_CACHEGEOMETRY 47   /* Encoded geometry of L3 cache */
+#define AT_L1I_CACHESIZE 40     /* Size of L1 instruction cache (bytes) */
+#define AT_L1I_CACHEGEOMETRY 41 /* Encoded geometry of L1 I-cache */
+#define AT_L1D_CACHESIZE 42     /* Size of L1 data cache (bytes) */
+#define AT_L1D_CACHEGEOMETRY 43 /* Encoded geometry of L1 D-cache */
+#define AT_L2_CACHESIZE 44      /* Size of L2 cache (bytes) */
+#define AT_L2_CACHEGEOMETRY 45  /* Encoded geometry of L2 cache */
+#define AT_L3_CACHESIZE 46      /* Size of L3 cache (bytes) */
+#define AT_L3_CACHEGEOMETRY 47  /* Encoded geometry of L3 cache */
 
-#define AT_MINSIGSTKSZ      51   /* Minimum stack size for signal handlers */
-
+#define AT_MINSIGSTKSZ 51 /* Minimum stack size for signal handlers */
 
 #endif /* __ELF_H__ */
