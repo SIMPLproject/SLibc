@@ -2,17 +2,21 @@
 #include <link.h>
 #include <stdlib.h>
 
-const ElfW(Ehdr) * get_main_prgm_hdr_from_auxv(void *argv)
+void __set_auvx_list(auxv_list *auxv_lst, ElfW(auxv_t) * auxv_head_ptr)
 {
-    Elf_auxv_t *auxv = get_auxv_from_argv(argv);
-
-    while (auxv->a_type != AT_NULL)
+    while (auxv_head_ptr->a_type != AT_NULL)
     {
-        if (auxv->a_type == AT_PHDR)
-        {
-            return (ElfW(Ehdr) *)auxv->a_un.a_val - 1;
-        }
-        auxv++;
+        int type = auxv_head_ptr->a_type;
+        auxv_lst->is_set[type] = true;
+        auxv_lst->value[type] = auxv_head_ptr->a_un.a_val;
+		auxv_head_ptr++;
     }
-    return NULL;
+}
+
+uint64_t __get_type_from_auxv(auxv_list *auxv_list, int type)
+{
+    if (auxv_list->is_set[type])
+        return auxv_list->value[type];
+
+    return -1;
 }

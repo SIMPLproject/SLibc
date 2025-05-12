@@ -1,1 +1,1 @@
-int errnono = 0;
+int errno = 0;

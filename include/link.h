@@ -39,4 +39,13 @@ struct r_debug
     ElfW(Addr) r_ldbase;	/* Base address the linker is loaded at.  */
   };
 
+struct link_map {
+    ElfW(Addr) l_addr;
+    char *l_name;
+    ElfW(Dyn) * l_dyn_section;
+    struct link_map *l_next;
+    struct link_map *l_prev;
+};
+
+
 #endif /* __LINK_H__ */
