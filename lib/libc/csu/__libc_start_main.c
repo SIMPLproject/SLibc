@@ -1,5 +1,4 @@
-__attribute__((noreturn)) void exit(int status);
-
+#include <unistd.h>
 typedef int (*main_func)(int, char **, char **);
 
 /* __libc_start_main implementation */
@@ -22,6 +21,6 @@ int __libc_start_main(int (*main)(int, char **, char **), //
 
     exit(ret);
     __builtin_unreachable();
-	(void)ld_fini;
+    (void)ld_fini;
     (void)stack_end;
 }

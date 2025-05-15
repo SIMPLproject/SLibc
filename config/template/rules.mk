@@ -1,3 +1,5 @@
+-include $(MK_CONFIG)/lib.mk
+
 ifdef NATIVE
 
 # $(1) obj_name
@@ -40,8 +42,6 @@ endef
 
 
 $(foreach flag,$(VERSION_FLAGS),\
-	$(info --- $(flag)) \
-	$(info $(call TEMPLATE_RULES,$(flag)))\
 	$(eval $(call TEMPLATE_RULES,$(flag)))\
 )
 
@@ -63,7 +63,13 @@ $(BUILD_FOLDER)/%.o: %.c
 
 $(BUILD_FOLDER)/%.o: %.S
 	mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(SIMD_LEVEL) $(INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+
+ifdef DEPENDENCY_LIB
+__DEPENDENCY_LIB  = $(foreach lib,$(DEPENDENCY_LIB), $(BUILD_LIB_FOLDER)/$($(lib)_NAME).a )
+endif
+
 
 # $(1) lib name
 # $(2) lib build folder
@@ -74,7 +80,8 @@ compile_lib_shared : $(2)/$(1).so
 $$(eval OBJ_SHARED_$(1) := $$(filter-out %_archive.o,$(3)))
 
 $(2)/$(1).so: $$(OBJ_SHARED_$(1))
-	$$(CC) -v -shared -Wl,-soname,$(1).so  -Wl,-z,defs -nostdlib -o $$@ $$^  $$(LDFLAGS)
+	$$(CC) -shared -Wl,-soname,$(1).so -nostdlib  -ffunction-sections -fdata-sections -o $$@  $$^ -Wl,--gc-sections -Wl,--as-needed $(__DEPENDENCY_LIB)
+	# strip --strip-unneeded $$@
 endef
 
 # $(1) lib name
@@ -85,7 +92,6 @@ compile_lib_archive : $(2)/$(1).a
 $$(eval OBJ_ARCHIVE_$(1) := $$(filter-out %_shared.o %_generic.o,$(3)))
 
 $(2)/$(1).a: $$(OBJ_ARCHIVE_$(1))
-	$$(AR) rcs $$@ $$^
+	$$(AR) rcs $$@  $$^
 
 endef
-

@@ -44,8 +44,8 @@
 	*  this is used to determine the cache size
 */
 
-void get_cache_info();
-void *allocate_cache(size_t size);
+__hidden void get_cache_info();
+__hidden void *allocate_cache(size_t size);
 
 /*
 	* this structure is used to store the block information 
@@ -69,18 +69,16 @@ typedef struct Block {
 
 /* block utils */
 
-void coalesce_free_blocks(); 
-Block *find_free_block(Block **last, size_t size, size_t alignment); 
-void split_block(Block *block, size_t size, size_t alignment);
+__hidden void coalesce_free_blocks(); 
+__hidden Block *find_free_block(Block **last, size_t size, size_t alignment); 
+__hidden void split_block(Block *block, size_t size, size_t alignment);
 
 /* memory allocation */
 
-void *request_space_mmap(size_t size, size_t alignment);
-Block *request_space_sbrk(Block *last, size_t size, size_t alignment);
-void check_alignment(void *aligned_address);
-void *_malloc(size_t size);
-void *_aligned_alloc(size_t alignment, size_t size);
-void _free(void *ptr);
+__hidden void *request_space_mmap(size_t size, size_t alignment);
+__hidden Block *request_space_sbrk(Block *last, size_t size, size_t alignment);
+__hidden void check_alignment(void *aligned_address);
+__hidden void *_aligned_alloc(size_t alignment, size_t size);
 
 /* memory leak detection and utils */
 
@@ -88,8 +86,8 @@ void check_for_leaks();
 /* void hexdump(void *ptr, size_t size); */
 
 
-void* _mmap(void* start, size_t len, int prot, int flags, int fd, size_t offset); 
-int _munmap(void* addr, size_t length); 
+__hidden void* _mmap(void* start, size_t len, int prot, int flags, int fd, size_t offset); 
+__hidden int _munmap(void* addr, size_t length); 
 
-void * _sbrk(intptr_t increment);
+__hidden void * _sbrk(intptr_t increment);
 #endif // MALLOC_H

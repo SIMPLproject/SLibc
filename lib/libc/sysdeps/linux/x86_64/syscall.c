@@ -1,3 +1,4 @@
+#include <sys/symbols.h>
 #include <config.h>
 #include <stdarg.h>
 
@@ -35,3 +36,4 @@ long __syscall(long number, ...)
 
 
 simpl_weak_alias(syscall, __syscall)
+simpl_hidden_alias(syscall, __syscall)
