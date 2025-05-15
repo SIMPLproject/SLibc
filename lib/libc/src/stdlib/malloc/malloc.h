@@ -2,9 +2,9 @@
 #define MALLOC_H
 
 #include <unistd.h>
+#include <sys/mman.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <sys/mman.h>
 #include <string.h>
 
 #if !defined(__HAS_ASSERT__)

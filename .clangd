@@ -1,0 +1,4 @@
+CompileFlags:
+  Add:        # add these flags to every translation unit
+    - -nostdinc
+    - -Iinclude

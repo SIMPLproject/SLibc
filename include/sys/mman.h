@@ -1,17 +1,19 @@
 #ifndef __SYS_MMAN_H__
 #define __SYS_MMAN_H__
 
+#define _LARGEFILE64_SOURCE
 #include <stddef.h>
-#include <sys/types.h>
 #include <sys/symbols.h>
+#include <sys/types.h>
+
 
 void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
 libc_hidden_proto(mmap)
 
-int   munmap(void *addr, size_t length);
+    int munmap(void *addr, size_t length);
 libc_hidden_proto(munmap)
 
-int   mprotect(void *addr, size_t len, int prot);
+    int mprotect(void *addr, size_t len, int prot);
 libc_hidden_proto(mprotect)
 
 #define PROT_NONE 0x0

@@ -17,5 +17,4 @@ void *__mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offse
     return (void *)ret;
 }
 
-simpl_weak_alias(mmap, __mmap)
-simpl_hidden_alias(mmap, __mmap)
+simpl_weak_alias(mmap, __mmap) simpl_hidden_alias(mmap, __mmap)
