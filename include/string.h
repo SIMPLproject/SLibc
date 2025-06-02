@@ -27,4 +27,7 @@ libc_hidden_proto(memcpy)
 char *strncpy (char *__d, const char *__s, size_t __n) __nonnull (1, 2);
 libc_hidden_proto(strncpy)
 
+int ffs (int __x);
+libc_hidden_proto(ffs)
+
 #endif // __STRING_H__

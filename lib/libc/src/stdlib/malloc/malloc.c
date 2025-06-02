@@ -1,114 +1,55 @@
-#define SHARED
+#include "include.h"
 #include <stdlib.h>
+#include <sys/simpl_builtin.h>
 
-#include "malloc.h"
-#include "config.h"
+Block __hidden *freelist = NULL;
+int __hidden    allocated_blocks = 0;
+size_t __hidden block_size[] = {16,  32,  48,  64,  80,  96,  112, 128,
+                                144, 160, 176, 192, 208, 224, 240, 256};
+Block __hidden *bins[BIN_COUNT] = {NULL};
+Block          *is_mmap = NULL;
 
-#include <sys/symbols.h>
 
-
-Block *freelist = NULL;
-int allocated_blocks = 0;
-int freed_blocks = 0;
-Block *bins[BIN_COUNT] = {NULL};
-Block *is_mmap = NULL;
-
-void *__slibc_malloc(size_t size) {
-    if (__builtin_expect(size == 0, 0))
+__attribute__((hot, flatten, always_inline)) inline void *__slibc_malloc(size_t size)
+{
+    if (simpl_expect(size == 0, 0))
         return NULL;
-    size = ALIGN(size, ALIGNMENT);
-
+    size = simpl_align_up(size, ALIGNMENT);
     Block *block = NULL;
-    if (size <= BIN_MAX_SIZE) {
+    if (size <= BIN_MAX_SIZE)
+    {
         int bin_index = size / ALIGNMENT - 1;
-        if (bin_index >= 0 && bin_index < BIN_COUNT && bins[bin_index]) {
-            #if DEBUG
-                printf("Allocating from bin %d\n", bin_index);
-                printf("Block size: %zu\n", size);
-                printf("\n");
-            #endif
+        if (bin_index >= 0 && bin_index < BIN_COUNT && bins[bin_index])
+        {
             Block *block = bins[bin_index];
             bins[bin_index] = block->next;
             block->free = 0;
-            memset(block->aligned_address, 0, size);
             return block->aligned_address;
         }
     }
-	printf("Allocating with malloc\n");
+
     if (size >= MMAP_THRESHOLD)
         return request_space_mmap(size, ALIGNMENT);
-    else {
-        if (!freelist) {
-            block = request_space_sbrk(NULL, size, ALIGNMENT);
-            if (__builtin_expect(!block, 0))
-                return NULL;
+    else
+    {
+        if (!freelist)
+        {
+            block = request_space(NULL, size, ALIGNMENT);
             freelist = block;
-        } else {
+        } else
+        {
             Block *last = freelist;
-            block = find_free_block(&last, size, ALIGNMENT);
-            if (block) {
-                if (block->size >= size + MBLOCK_SIZE)
+            block = find_free_block(size, ALIGNMENT);
+            if (block)
+            {
+                if (block->size >= size + BLOCK_SIZE)
                     split_block(block, size, ALIGNMENT);
                 block->free = 0;
-                memset(block->aligned_address, 0, size);
-            } else {
-                block = request_space_sbrk(last, size, ALIGNMENT);
-                if (__builtin_expect(!block, 0))
-                    return NULL;
-            }
+            } else
+                block = request_space(last, size, ALIGNMENT);
         }
     }
-
-    return block->aligned_address;
-}
-
-void *_aligned_alloc(size_t alignment, size_t size) {
-    if (__builtin_expect(size == 0, 0) || (alignment & (alignment - 1)) != 0)
-        return NULL;
-    
-    size = ALIGN(size, alignment);
-    Block *block = NULL;
-    
-    if (size <= CACHE_SIZE_L1) {
-        // _mm_prefetch(freelist, _MM_HINT_T0);
-    } else if (size <= CACHE_SIZE_L2) {
-        // _mm_prefetch(freelist, _MM_HINT_T1);
-    }
-	#if DEBUG
-		printf("Allocating %zu bytes with alignment %zu\n", size, alignment);
-	#endif
-    if (size >= MMAP_THRESHOLD) {
-        return request_space_mmap(size, alignment);
-    } else {
-        if (!freelist) {
-            block = request_space_sbrk(NULL, size, alignment);
-            if (__builtin_expect(!block, 0))
-                return NULL;
-            freelist = block;
-        } else {
-            Block *last = freelist;
-            block = find_free_block(&last, size, alignment);
-            if (block) {
-                if (block->size >= size + MBLOCK_SIZE)
-                    split_block(block, size, alignment);
-                block->free = 0;
-                memset(block->aligned_address, 0, size); 
-            } else {
-                block = request_space_sbrk(last, size, alignment);
-                if (__builtin_expect(!block, 0))
-                    return NULL;
-            }
-        }
-    }
-
-    uintptr_t addr = (uintptr_t)block->aligned_address;
-    uintptr_t aligned_addr = (addr + alignment - 1) & ~(alignment - 1);
-    block->aligned_address = (void *)aligned_addr;
-
-    if (alignment >= 32 ) 
-		memset(block->aligned_address, 0, size);
-
-    return block->aligned_address;
+    return simpl_assume_aligned(block->aligned_address, ALIGNMENT);
 }
 
 

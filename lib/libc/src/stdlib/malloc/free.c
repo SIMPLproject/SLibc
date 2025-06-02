@@ -1,17 +1,10 @@
-
-#include "malloc.h"
-#include "config.h"
-
-#include <stdlib.h>
+#include "include.h"
+#include <sys/simpl_builtin.h>
+#include <stdint.h>
 
 extern Block *freelist;
 extern size_t block_size;
 extern int allocated_blocks;
-extern int freed_blocks;
-
-static inline Block *get_freelist(void) {
-    return freelist;
-}
 
 /*
 	* Function to coalesce free blocks
@@ -25,25 +18,20 @@ static inline Block *get_freelist(void) {
 	* this function is called after freeing a block
 */
 
-#define MAX_BLOCK_SIZE 1024 * 1024
-void coalesce_free_blocks() {
-    Block *current = get_freelist();
+
+__attribute__((hot, flatten, always_inline))
+inline void coalesce_free_blocks() {
+    Block *current = freelist;
     while (current && current->next) {
         if (current->free && current->next->free) {
-            current->size += MBLOCK_SIZE + current->next->size;
+            current->size += BLOCK_SIZE + current->next->size;
             current->next = current->next->next;
 
             uintptr_t aligned_addr = (uintptr_t)(current + 1);
-            if (aligned_addr % ALIGNMENT != 0) 
+            if ((aligned_addr & ALIGNMENT - 1) != 0) 
                 printf("Warning: Coalesced block not aligned at %p\n", (void *)aligned_addr);
-            #ifdef DEBUG
-                printf("Coalesced block at %p with block at %p\n", current, current->next);
-                printf("New block size: %zu\n", current->size);
-                printf("\n");
-            #endif
         } else {
             current = current->next;
-			printf("current->size = %zu\n", current->size);
         }
     }
 }
@@ -59,39 +47,29 @@ void coalesce_free_blocks() {
 	* the number of freed blocks is incremented
 */
 
-void _free(void *ptr) {
-    if (__builtin_expect(ptr == NULL, 0))
+
+__attribute__((hot, always_inline))
+inline void __slibc_free(void *ptr) 
+{
+    if (!ptr)
         return;
-
     Block *block = (Block *)((uintptr_t)ptr - sizeof(Block));
-    assert(block != NULL);
-    assert(block->aligned_address == ptr);
-    assert(block->size > 0);
+	if (ptr != block->aligned_address) 
+		ptr = block->aligned_address;	
 
-    printf("block->size = %zu\n", block->size);
-    if (block->is_mmap) {
-        _munmap((void *)block, block->size + sizeof(Block));
-        freed_blocks++;
-        #ifdef DEBUG
-            printf("Freeing mmap block at %p\n", block);
-            printf("Allocated blocks: %d\n", allocated_blocks);
-            printf("Size of block: %zu\n", block->size);
-            printf("\n");
-        #endif
+    if (simpl_expect(block->size > block_size, 0)) 
+	{
+        size_t alignment_mask = PAGESIZE; // to change
+        size_t total_size = block->size + sizeof(Block) + alignment_mask;
+		total_size = simpl_align_up(total_size, ALIGNMENT);
+        munmap((void *)block, total_size);
     } else {
-        block->free = 1;
-        block->is_mmap = 0;
-        freed_blocks++;
-        #ifdef DEBUG
-            printf("free then coalesce_free_blocks\n");
-            printf("Block at %p has size %zu\n", block, block->size);
-            printf("Freeing block at %p\n", block);
-			printf("freed_blocks = %d\n", freed_blocks);
-            printf("\n");
-        #endif
-        coalesce_free_blocks();
+		coalesce_free_blocks();
+		block->free = 1;
     }
+    allocated_blocks--;
 }
 
 
-simpl_weak_alias(free, _free)
+libc_hidden_alias(__free, __slibc_free)
+simpl_weak_alias(free, __slibc_free)
