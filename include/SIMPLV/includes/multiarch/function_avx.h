@@ -127,6 +127,13 @@ static inline void __FUNC_ATTR_AVX __FUNC_AVX(v256b_storeu)(uvec *__a, vec __b)
 	((struct v256b_storeu *)__a)->result = __b.t_char.v256;
 }
 
+static inline vec __FUNC_ATTR_AVX __FUNC_AVX(v256b_andnot)(vec __a, vec __b)
+{
+    vec result;
+    result.t_char.v256 = (__v32c)((~(__v32c)__a.t_char.v256) & (__v32c)__b.t_char.v256);
+    return result;
+}
+
 # undef __FUNC_ATTR_AVX
 # undef __SIMPLV_TYPE_ONLY
 

@@ -212,7 +212,13 @@ static inline void __FUNC_ATTR_SSE __FUNC_SSE(v256b_storeu)(uvec *__a, vec __b)
 	dst->high = __b.t_char.v128[1];
 }
 
-
+static inline vec __FUNC_ATTR_SSE __FUNC_SSE(v256b_andnot)(vec __a, vec __b) 
+{
+    vec result;
+    result.t_uint.v128[0] = (__v4ui)((~(__v4ui)__a.t_uint.v128[0]) & (__v4ui)__b.t_uint.v128[0]);
+    result.t_uint.v128[1] = (__v4ui)((~(__v4ui)__a.t_uint.v128[1]) & (__v4ui)__b.t_uint.v128[1]);
+    return result;
+}
 
 # undef __FUNC_ATTR_SSE
 # undef __SIMPLV_TYPE_ONLY
