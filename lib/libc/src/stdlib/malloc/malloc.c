@@ -196,7 +196,7 @@ __attribute__((hot)) void *request_space_mmap(size_t size, size_t alignment)
     return block->aligned_address;
 }
 
-inline void *malloc(size_t size)
+void *__malloc_simpl(size_t size)
 {
     if (size == 0)
         return NULL;
@@ -265,3 +265,7 @@ inline void *malloc(size_t size)
 
     return block->aligned_address;
 }
+
+
+libc_hidden_alias(__malloc, __malloc_simpl)
+simpl_weak_alias(malloc, __malloc_simpl);
