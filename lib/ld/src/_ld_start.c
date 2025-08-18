@@ -19,6 +19,7 @@ struct r_debug _r_debug = {
 
 static struct __link_map *init_link_map(const ElfW(Ehdr) * hdr_prgm)
 {
+	(void)hdr_prgm;
     struct __link_map *new = __malloc(sizeof(struct __link_map));
     if (new == NULL)
         return NULL;

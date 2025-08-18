@@ -1,5 +1,13 @@
 #include <unistd.h>
+#include <unistd.h>
+
+#include "csu_init_func.h"
+
 typedef int (*main_func)(int, char **, char **);
+
+static void init_func() {
+	initialize_memory_pool();
+}
 
 /* __libc_start_main implementation */
 int __libc_start_main(int (*main)(int, char **, char **), //
@@ -13,6 +21,8 @@ int __libc_start_main(int (*main)(int, char **, char **), //
         init();
 
     char **env = argv + argc + 1;
+
+	init_func();
 
     int ret = main(argc, argv, env);
 

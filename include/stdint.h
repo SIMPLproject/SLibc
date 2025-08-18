@@ -34,6 +34,8 @@ typedef unsigned int		uintptr_t;
 #endif
 
 /* Macros for minimum-width integer constants */
+
+#ifndef __INT64_C
 # if __ARCH_WIDTH == 64
 #  define __INT64_C(c)	c ## L
 #  define __UINT64_C(c)	c ## UL
@@ -41,6 +43,18 @@ typedef unsigned int		uintptr_t;
 #  define __INT64_C(c)	c ## LL
 #  define __UINT64_C(c)	c ## ULL
 # endif
+#endif
+
+#ifndef __UINT64_C
+# if __ARCH_WIDTH == 64
+#  define __INT64_C(c)	c ## L
+#  define __UINT64_C(c)	c ## UL
+# else
+#  define __INT64_C(c)	c ## LL
+#  define __UINT64_C(c)	c ## ULL
+# endif
+#endif
+
 
 /* Limits of specified-width integer types */
 #define INT8_MIN   (-0x7f - 1)

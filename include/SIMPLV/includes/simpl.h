@@ -269,6 +269,8 @@ vec v256b_setzero(void);
 
 vec v256b_min(vec __a, vec __b);
 
+vec v256b_andnot(vec __a, vec __b);
+
 #endif /* __SIMPLV_TYPE_ONLY */
 
 #endif /* __SIMPLV_H__ */

@@ -8,8 +8,12 @@
 #else
 #    define NULL (void *)0
 #endif
+
 #include <stddef.h>
 #include <sys/symbols.h>
+
+#define EXIT_FAILURE 0
+#define EXIT_SUCCESS 1
 
 void exit(int status);
 libc_hidden_proto(exit);
