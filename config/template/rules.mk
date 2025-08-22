@@ -83,6 +83,7 @@ $(2)/$(1).so: $$(OBJ_SHARED_$(1))
 	$$(CC) -shared -Wl,-soname,$(1).so -nostdlib  -ffunction-sections -fdata-sections -o $$@  $$^ -Wl,--gc-sections -Wl,--as-needed $(__DEPENDENCY_LIB)
 	# strip --strip-unneeded $$@
 endef
+.PHONY: compile_lib_shared
 
 # $(1) lib name
 # $(2) lib build folder
@@ -95,3 +96,7 @@ $(2)/$(1).a: $$(OBJ_ARCHIVE_$(1))
 	$$(AR) rcs $$@  $$^
 
 endef
+.PHONY: compile_lib_archive
+
+-include $(BUILD_FOLDER)/**/*.d
+-include $(BUILD_FOLDER)/*.d

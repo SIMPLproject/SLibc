@@ -1,5 +1,5 @@
-#ifndef __WORDSIZE__
-#define __WORDSIZE__
+#ifndef __LIBC_LINUX_86_64_BITS_WORDSIZE__
+#define __LIBC_LINUX_86_64_BITS_WORDSIZE__
 
 /* Determine architecture width */
 #if defined __x86_64__ && !defined __ILP32__
@@ -10,4 +10,4 @@
 
 #define __WORDSIZE __ARCH_WIDTH
 
-#endif /* __WORDSIZE__ */
+#endif /* __LIBC_LINUX_86_64_BITS_WORDSIZE__ */

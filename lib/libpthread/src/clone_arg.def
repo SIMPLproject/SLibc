@@ -1,0 +1,53 @@
+
+//        /*
+//         * If CLONE_VM is set, parent and child share the same memory space; otherwise, the child
+//         * gets a separate copy like fork.
+//         */
+//        (0 // CLONE_VM
+//
+//         /*
+//          * share the same filesystem information
+//          * (if not set clone create a copy of the fs)
+//          */
+//         | CLONE_FS
+//
+//         /*
+//          * share the same file descriptor table
+//          */
+//         | CLONE_FILES
+//
+//         /*
+//          * makes the parent and child share System V semaphore adjustments, meaning semaphore
+//          * changes affect both. Without it, the child gets a new, empty semaphore adjustment list.
+//          */
+//         | CLONE_SYSVSEM
+//
+//         /*
+//          * parent and child share signal handlers but have separate signal masks and pending
+//          * signals
+//          */
+//         | CLONE_SIGHAND
+//
+//         /*
+//          * If CLONE_THREAD is set, the child joins the parent's thread group, sharing the same PID
+//          * (TGID), signal disposition, and parent but maintaining a unique TID and signal mask.
+//          */
+//         | CLONE_THREAD
+//
+//         /*
+//          * Set the TLS descriptor to .tls, with architecture-dependent
+//          * interpretation. (x86_64 %fs register)
+//          */
+//         /* | CLONE_SETTLS */
+//
+//         /*
+//          * Store the child thread ID at .parent_tid in parent memory before
+//          * returning to user space.
+//          */
+//         | CLONE_PARENT_SETTID
+//
+//         /*
+//          * Clear and wake the futex at .child_tid in child memory on exit.
+//          */
+//         | CLONE_CHILD_CLEARTID //
+//        );

@@ -1,5 +1,5 @@
-#ifndef __SYSCALL_TABLE_H__
-#define __SYSCALL_TABLE_H__
+#ifndef __LIBC_LINUX_X86_64_BITS_SYSCALL_TABLE_H__
+#define __LIBC_LINUX_X86_64_BITS_SYSCALL_TABLE_H__
 
 #define __SYS_read                    0
 #define __SYS_write                   1
@@ -354,4 +354,4 @@
 #define __SYS_faccessat2            439
 #define __SYS_process_madvise       440
 
-#endif /* __SYSCALL_TABLE_H__ */
+#endif /* __LIBC_LINUX_X86_64_BITS_SYSCALL_TABLE_H__ */

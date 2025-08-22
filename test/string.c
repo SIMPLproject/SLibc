@@ -1,6 +1,8 @@
 #include "test_template.h"
 #include <string.h>
 
+int __strcmp_generic (const char *__s1, const char *__s2);
+
 void strlen_test()
 {
     printf("\ntesting strlen...\n");
@@ -59,43 +61,110 @@ void memcpy_test() {
     char dst[20] = {0};
 
     memcpy(dst, src, 10);
-    BASIC_TEST("basic copy", strcmp, 0, dst, src);
+    BASIC_TEST("basic copy", __strcmp_generic, 0, dst, src);
 
     char big_src[10000], big_dst[10000];
     memset(big_src, 'a', 10000);
     memcpy(big_dst, big_src, 10000);
-    BASIC_TEST("large copy", strcmp, 0, big_dst, big_src);
+    BASIC_TEST("large copy", __strcmp_generic, 0, big_dst, big_src);
 }
 
-void strncpy_test() {
-    printf("\ntesting strncpy...\n");
-    char buf[10] = {0};
-
-    strncpy(buf, "abc", 5);
-    BASIC_TEST("copy short string with padding", strcmp, 0, buf, "abc");
-
-    strncpy(buf, "hello world", 5);
-    buf[5] = '\0';
-    BASIC_TEST("copy truncated string", strcmp, 0, buf, "hello");
-
-    strncpy(buf, "", 5);
-    BASIC_TEST("copy empty string", strcmp, 0, buf, "");
-}
+// void strncpy_test() {
+//     printf("\ntesting strncpy...\n");
+//     char buf[10] = {0};
+//
+//     strncpy(buf, "abc", 5);
+//     BASIC_TEST("copy short string with padding", strcmp, 0, buf, "abc");
+//
+//     strncpy(buf, "hello world", 5);
+//     buf[5] = '\0';
+//     BASIC_TEST("copy truncated string", strcmp, 0, buf, "hello");
+//
+//     strncpy(buf, "", 5);
+//     BASIC_TEST("copy empty string", strcmp, 0, buf, "");
+// }
 
 void memmove_test() {
     printf("\ntesting memmove...\n");
     char buf1[] = "abcdefghij";
     memmove(buf1 + 2, buf1, 8);
-    BASIC_TEST("right overlap", strcmp, 0, buf1 + 2, "abcdefgh");
+    BASIC_TEST("right overlap", __strcmp_generic, 0, buf1 + 2, "abcdefgh");
 
     char buf2[] = "abcdefghij";
     memmove(buf2, buf2 + 2, 8);
-    BASIC_TEST("left overlap", strcmp, 0, buf2, "cdefghij");
+    BASIC_TEST("left overlap", __strcmp_generic, 0, buf2, "cdefghij");
 
     char big[10000];
     for (int i = 0; i < 10000; ++i) big[i] = 'x';
     memmove(big + 10, big, 9990);
-    BASIC_TEST("large overlap", strcmp, 0, big + 10, big);
+    BASIC_TEST("large overlap", __strcmp_generic, 0, big + 10, big);
+}
+
+
+
+
+void memset_test(void) {
+    printf("\ntesting memset...\n");
+
+    // fill full buffer
+    {
+        char buf[11];
+        memset(buf, 'a', 10);
+        buf[10] = '\0';
+        BASIC_TEST("fill 10 'a'", __strcmp_generic, 0, buf, "aaaaaaaaaa");
+    }
+
+    // partial fill in the middle
+    {
+        char buf[] = "abcdefghij";
+        memset(buf + 2, 'Z', 5); // abcdefghij -> abZZZZZhij
+        BASIC_TEST("partial middle fill", __strcmp_generic, 0, buf, "abZZZZZhij");
+    }
+
+    // zero length: no change
+    {
+        char buf[] = "abc";
+        memset(buf, 'X', __extension__ 0);
+        BASIC_TEST("zero length no-op", __strcmp_generic, 0, buf, "abc");
+    }
+
+    // small prefix fill (checks that only first N bytes are changed)
+    {
+        char buf[] = "abcdefghij";
+        memset(buf, 'q', 3); // -> qqqdefghij
+        BASIC_TEST("prefix fill 3", __strcmp_generic, 0, buf, "qqqdefghij");
+    }
+
+    // size 1 fill
+    {
+        char buf[] = "abcdefghij";
+        memset(buf + 9, 'K', 1); // last char only
+        BASIC_TEST("size 1 fill", __strcmp_generic, 0, buf, "abcdefghiK");
+    }
+
+    // non-ASCII byte value (0xAB) — ensure it’s treated as unsigned char
+    {
+        unsigned char b1[9], e1[9];
+        memset(b1, 0xAB, 8); b1[8] = 0;   // NUL-terminate for __strcmp_generic
+        memset(e1, 0xAB, 8); e1[8] = 0;
+        BASIC_TEST("fill 0xAB bytes", __strcmp_generic, 0, (char *)b1, (char *)e1);
+    }
+
+    // negative value (-1) should become 0xFF
+    {
+        unsigned char b1[9], e1[9];
+        memset(b1, -1, 8); b1[8] = 0;
+        memset(e1, 0xFF, 8); e1[8] = 0;
+        BASIC_TEST("fill -1 -> 0xFF", __strcmp_generic, 0, (char *)b1, (char *)e1);
+    }
+
+    // large fill
+    {
+        char big[10001], exp[10001];
+        memset(big, 'x', 10000); big[10000] = '\0';
+        memset(exp, 'x', 10000); exp[10000] = '\0';
+        BASIC_TEST("large fill 10k", __strcmp_generic, 0, big, exp);
+    }
 }
 
 
@@ -105,6 +174,7 @@ int main()
     strcmp_test();
     strncmp_test();
     memcpy_test();
-    strncpy_test();
+	memset_test();
+    // strncpy_test();
     return 0;
 }

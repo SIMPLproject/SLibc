@@ -17,6 +17,5 @@ INCLUDE_FOLDER += -I sysdeps/$(SYSTEM)/$(ARCH)
 
 $(eval $(call OBJ_RULES,OBJ,$(SRC)))
 
-$(info obj === $(OBJ))
 $(eval $(call COMPILE_LIB_ARCHIVE,$(NAME),$(LIB_FOLDER),$(OBJ)))
 $(eval $(call COMPILE_LIB_SHARED,$(NAME),$(LIB_FOLDER),$(OBJ)))
