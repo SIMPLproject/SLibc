@@ -1,11 +1,10 @@
-
 #include <pthread.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <unistd.h>
 
 
-int ft_tsprintf(const char *format, ...)
+int tsprintf(const char *format, ...)
 {
     char    print_buff[256];
     va_list lst;

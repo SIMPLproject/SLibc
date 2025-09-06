@@ -1,9 +1,6 @@
+#include <pthread.h>
 
-#include <ft_pthread.h>
-#include <stdarg.h>
-#include <stdio.h>
-
-#ifdef VERBOSE
+#ifdef THREAD_LOG
 #    define ft_pthread_log(...) __ft_pthread_log(__VA_ARGS__)
 #    define ft_pthread_log_self(...) __ft_pthread_log_self(__VA_ARGS__)
 #else
@@ -16,7 +13,7 @@
 /*
  *  log the thread data with a thread safe print
  */
-void __ft_pthread_log(t_pthread *thread, const char *msg, ...);
+void __ft_pthread_log(pthread_t *thread, const char *msg, ...);
 
 /*
  * use the ft_pthread_log data but use the %fs register

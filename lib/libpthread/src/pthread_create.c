@@ -1,21 +1,22 @@
-#include "__ft_pthread.h"
-#include "ft_pthread.h"
-#include "ft_pthread_log.h"
-#include "sysdeps/ft_futex.h"
-#include "sysdeps/ft_mman.h"
+#include <sys/mman.h>
+#include <pthread.h>
 #include "sysdeps/ft_pthread_arch.h"
 #include "sysdeps/ft_sched.h"
-#include <asm-generic/param.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 
+
+#include "__pthread.h"
+#include "pthread_log.h"
+#include "sysdeps/futex.h"
+
 #define _GNU_SOURCE
 #include <sched.h>
 #include <unistd.h>
 
-static int get_stack_size(const t_pthread_attr *attr)
+static int get_stack_size(const pthread_attr_t *attr)
 {
     if (attr)
         return ALIGN(attr->stack_size);
@@ -27,7 +28,7 @@ static void *ft_pthread_create_stack(uint32_t stack_size)
 {
     void *stack;
 
-    stack = ft_mmap(NULL, stack_size, PROT_RW, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    stack = mmap(NULL, stack_size, PROT_RW, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
     if (!stack)
         return (NULL);
     /* if (ft_mprotect(stack, EXEC_PAGESIZE, PROT_NONE) == -1) */
@@ -64,7 +65,7 @@ static void assign_thread_id(__pthread *thread)
     id++;
 }
 
-static int alloc_and_map_stack(__pthread **tp, const t_pthread_attr *attr)
+static int alloc_and_map_stack(__pthread **tp, const pthread_attr_t *attr)
 {
     int stack_size = get_stack_size(attr);
     int tls_size = 1024 * 1024; // TO CHANGE
@@ -94,7 +95,7 @@ static int alloc_and_map_stack(__pthread **tp, const t_pthread_attr *attr)
     return 0;
 }
 
-int ft_pthread_create(t_pthread *__restrict__ thread, const t_pthread_attr *__restrict__ attr,
+int pthread_create(pthread_t *__restrict__ thread, const pthread_attr_t *__restrict__ attr,
                       void *(*start_routine)(void *), void *__restrict__ arg)
 {
     __pthread *new;
@@ -105,7 +106,7 @@ int ft_pthread_create(t_pthread *__restrict__ thread, const t_pthread_attr *__re
         // set errno and other;
         return 1;
     }
-    *thread = (t_pthread) new;
+    *thread = (pthread_t) new;
 
     new->routine = start_routine;
     new->arg = arg;
@@ -133,7 +134,7 @@ int ft_pthread_create(t_pthread *__restrict__ thread, const t_pthread_attr *__re
     if (tid == -1)
     {
         ft_pthread_log(thread, "fail create");
-        ft_munmap(new->mapped_region, new->mapped_size);
+        munmap(new->mapped_region, new->mapped_size);
         return (-1);
     }
     ft_pthread_log(thread, "end create");

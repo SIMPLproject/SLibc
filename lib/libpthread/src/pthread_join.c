@@ -1,10 +1,10 @@
-#include "__ft_pthread.h"
-#include "ft_pthread_log.h"
-#include "sysdeps/ft_futex.h"
-#include <errno.h>
-#include <stdio.h>
+#include <stdlib.h>
 
-int ft_pthread_join(t_pthread *thread, void **value_ptr)
+#include "__pthread.h"
+#include "pthread_log.h"
+#include "sysdeps/futex.h"
+
+int ft_pthread_join(pthread_t *thread, void **value_ptr)
 {
 	__pthread *tp = (__pthread *)*thread;
     ft_pthread_log(thread, "start join");
@@ -15,7 +15,7 @@ int ft_pthread_join(t_pthread *thread, void **value_ptr)
         if (current_state != TH_JOINABLE)
         {
             ft_pthread_log(thread, "before wait");
-            if (ft_futex_wait((int *)&tp->thread_status, current_state) == -1)
+            if (futex_wait((int *)&tp->thread_status, current_state) == -1)
                 return 1;
             ft_pthread_log(thread, "after wait");
         }

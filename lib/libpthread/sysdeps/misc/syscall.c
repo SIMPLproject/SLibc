@@ -1,5 +1,4 @@
 #include "misc.h"
-#include <sys/stdargs.h>
 #include <sys/cdefs.h>
 #include <errno.h>
 

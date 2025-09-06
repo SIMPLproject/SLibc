@@ -1,7 +1,7 @@
 #ifndef __FT_PTHREAD_H
 #define __FT_PTHREAD_H
 
-#include "___pthread.h"
+#include <pthread.h>
 #include <stdint.h>
 
 #define DEFAULT_STACK_SIZE (8192 * 1024)
@@ -33,11 +33,11 @@ typedef struct __pthread {
     int   stack_size;
     int   tls_size;
 
-    int               tid;
-    int               id;
+    int             tid;
+    int             id;
     pthread_routine routine;
-    atomic_int        thread_status;
-    pthread_attr    attr;
+    _Atomic int     thread_status;
+    pthread_attr_t  attr;
 
     // user settings
 
