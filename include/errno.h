@@ -3,12 +3,10 @@
 
 #include <sys/errno_table.h>
 
-extern int errno;
-
-static inline int *__get_errno_location(void) {
-    return &errno;
-}
+int *__get_errno_location(void);
 
 #define __set_errno(value) (*__get_errno_location() = (value))
+
+#define errno (*__set_errno_location())
 
 #endif /* __ERRNO_H__ */
