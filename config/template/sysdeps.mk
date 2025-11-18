@@ -1,3 +1,5 @@
+SYSDEPS_SRC_PATH := sysdeps/$(SYSTEM)/$(ARCH)
+
 # $(1) sysdeps path
 # $(2) SRC_DEST
 define GET_SRC_SYSDEPS

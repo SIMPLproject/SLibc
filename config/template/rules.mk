@@ -1,4 +1,5 @@
 -include $(MK_CONFIG)/lib.mk
+-include sysdeps.mk
 
 ifdef NATIVE
 
@@ -68,6 +69,11 @@ $(BUILD_FOLDER)/%.o: %.S
 
 ifdef DEPENDENCY_LIB
 __DEPENDENCY_LIB  = $(foreach lib,$(DEPENDENCY_LIB), $(BUILD_LIB_FOLDER)/$($(lib)_NAME).a )
+
+# base include internal
+INCLUDE  += $(foreach lib,$(DEPENDENCY_LIB), -I $(LIB_FOLDER)/$(lib)/include )
+# sysdeps include
+INCLUDE  += $(foreach lib,$(DEPENDENCY_LIB), -I $(LIB_FOLDER)/$(lib)/$(SYSDEPS_SRC_PATH))
 endif
 
 
@@ -75,7 +81,7 @@ endif
 # $(2) lib build folder
 # $(3) OBJ
 define COMPILE_LIB_SHARED
-compile_lib_shared : $(2)/$(1).so 
+COMPILE_LIB_SHARED := $(2)/$(1).so 
 
 $$(eval OBJ_SHARED_$(1) := $$(filter-out %_archive.o,$(3)))
 
@@ -83,20 +89,18 @@ $(2)/$(1).so: $$(OBJ_SHARED_$(1))
 	$$(CC) -shared -Wl,-soname,$(1).so -nostdlib  -ffunction-sections -fdata-sections -o $$@  $$^ -Wl,--gc-sections -Wl,--as-needed $(__DEPENDENCY_LIB)
 	# strip --strip-unneeded $$@
 endef
-.PHONY: compile_lib_shared
 
 # $(1) lib name
 # $(2) lib build folder
 # $(3) OBJ
 define COMPILE_LIB_ARCHIVE
-compile_lib_archive : $(2)/$(1).a
+COMPILE_LIB_ARCHIVE := $(2)/$(1).a
 $$(eval OBJ_ARCHIVE_$(1) := $$(filter-out %_shared.o %_generic.o,$(3)))
 
 $(2)/$(1).a: $$(OBJ_ARCHIVE_$(1))
 	$$(AR) rcs $$@  $$^
 
 endef
-.PHONY: compile_lib_archive
 
 -include $(BUILD_FOLDER)/**/*.d
 -include $(BUILD_FOLDER)/*.d

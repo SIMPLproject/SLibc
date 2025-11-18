@@ -10,7 +10,7 @@ int   __munmap(void *addr, size_t length)
 
     if (ret < 0)
     {
-        errno = -ret;
+		(*__get_errno_location()) = -ret;
         return -1;
     }
     return 0;

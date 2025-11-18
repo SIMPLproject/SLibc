@@ -1,4 +1,4 @@
-all: compile_lib_shared compile_lib_archive
+all: compile
 
 DEPENDENCY_LIB = libc ld
 
@@ -20,3 +20,6 @@ CFLAGS += $(INCLUDE_FOLDER)
 
 $(eval $(call OBJ_RULES,OBJ,$(SRC)))
 $(eval $(call COMPILE_LIB_SHARED,$(NAME),$(LIB_FOLDER),$(OBJ)))
+
+compile : $(COMPILE_LIB_SHARED) $(COMPILE_LIB_ARCHIVE)
+.PHONY: compile

@@ -1,6 +1,7 @@
 SYSTEM=linux
 ARCH=x86_64
 BUILD_FOLDER=$(shell realpath bin)
+BASE_FOLDER=$(PWD)
 
 MK_CONFIG=$(shell realpath config)
 -include $(MK_CONFIG)/*.mk
@@ -27,7 +28,7 @@ SIMD_LEVEL := -fno-tree-vectorize -fno-builtin -mno-sse -mno-avx
 endif
 
 # for the compile_commands.json
-CFLAGS += -nostdinc
+# CFLAGS += -nostdinc
 
 ifeq ($(VERBOSE), true)
 	CFLAGS += -DVERBOSE
@@ -60,7 +61,9 @@ export ARCH
 
 LIBS_SRC = $(addprefix lib/,$($(LIBS)_NAME))
 
-all : init_build include crt  custom_clang build_libs
+all : setup libs
+
+setup : init_build include crt  custom_clang
 
 
 # init phase
@@ -84,23 +87,10 @@ include: init_build
 ##############################################################################################
 
 
-
 # build lib
 ##############################################################################################
-# all lib settings are in config/lib.mk
 
-# $(1) lib name
-define build_lib
-	@echo building : $(1)
-	@$(MAKE) -C lib/$(1) \
-		BUILD_FOLDER="$(BUILD_OBJ_FOLDER)/$(1)" \
-		LIB_FOLDER="$(BUILD_LIB_FOLDER)" \
-		NAME="$(1)"
-	@echo end of building $(1)
-endef
-
-build_libs: init_build include
-	$(foreach lib,$(LIBS), $(call build_lib,$($(lib)_NAME)))
+-include lib/lib.mk
 
 ##############################################################################################
 

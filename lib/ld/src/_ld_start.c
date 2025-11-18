@@ -1,10 +1,10 @@
 #include <auxv.h>
-#include <machine.h>
+#include <libc/machine.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "__link.h"
+#include <libc/__link.h>
 
 /*
  * Debugging descriptor for debuggers (GDB uses this)
@@ -49,7 +49,7 @@ void _ld_start(char **argv)
 
 	__set_auvx_list(&auxv_lst, get_auxv_from_argv(argv));
 	
-    const ElfW(Ehdr) *hdr_linker = get_linker_elf_hdr();
+    const ElfW(Ehdr) *hdr_linker = get_pgrm_elf_hdr();
     const ElfW(Ehdr) *hdr_prgm  = (ElfW(Ehdr) *)__get_type_from_auxv(&auxv_lst, AT_PHDR);
 
     printf("[%p] %s\n", hdr_linker, hdr_linker->e_ident);

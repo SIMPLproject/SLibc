@@ -1,4 +1,4 @@
-all: compile_lib_shared
+all: compile
 
 DEPENDENCY_LIB = libc
 
@@ -19,4 +19,7 @@ INCLUDE_FOLDER += -I sysdeps/$(SYSTEM)/$(ARCH)
 CFLAGS += $(INCLUDE_FOLDER)
 
 $(eval $(call OBJ_RULES,OBJ,$(SRC)))
-$(eval $(call COMPILE_LIB_SHARED,$(NAME),$(LIB_FOLDER),$(OBJ)))
+$(eval $(call COMPILE_LIB_SHARED,$(NAME),$(BUILD_LIB_FOLDER),$(OBJ)))
+
+compile : $(COMPILE_LIB_SHARED)
+.PHONY: compile
