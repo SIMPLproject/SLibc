@@ -13,10 +13,16 @@
  *
  * or like gnu said it's **magically** define by the linker
  */
-static inline const ElfW(Ehdr) *get_pgrm_elf_hdr(void)
+static inline const ElfW(Ehdr) * get_pgrm_elf_hdr(void)
 {
     extern const ElfW(Ehdr) __ehdr_start __hidden;
     return &__ehdr_start;
+}
+
+static inline ElfW(Dyn) * get_machine_dynamic(void)
+{
+    extern ElfW(Dyn) _DYNAMIC[] __hidden;
+    return _DYNAMIC;
 }
 
 #include <__bits/machine.h>

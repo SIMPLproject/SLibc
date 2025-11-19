@@ -136,76 +136,76 @@ typedef struct {
 ///				64-BIT ENUMERATIONS
 //////////////////////////////////////////////////////////////
 
-typedef enum {
-    ET_NONE = 0,        // No file type
-    ET_REL = 1,         // Relocatable file
-    ET_EXEC = 2,        // Executable file
-    ET_DYN = 3,         // Shared object file
-    ET_CORE = 4,        // Core file
-    ET_LOOS = 0xFE00,   // OS-specific
-    ET_HIOS = 0xFEFF,   // OS-specific
-    ET_LOPROC = 0xFF00, // Processor-specific
-    ET_HIPROC = 0xFFFF  // Processor-specific
-} Elf64_EType;
-
-typedef enum {
-    EM_NONE = 0,        // No machine
-    EM_M32 = 1,         // AT&T WE 32100
-    EM_SPARC = 2,       // SPARC
-    EM_386 = 3,         // Intel 80386
-    EM_68K = 4,         // Motorola 68000
-    EM_88K = 5,         // Motorola 88000
-    EM_IAMCU = 6,       // Intel MCU
-    EM_860 = 7,         // Intel 80860
-    EM_MIPS = 8,        // MIPS R3000
-    EM_ARM = 40,        // ARM
-    EM_X86_64 = 62,     // x86-64
-    EM_AARCH64 = 183,   // ARM 64-bit
-    EM_RISCV = 243,     // RISC-V
-    EM_LOPROC = 0xFF00, // Processor-specific
-    EM_HIPROC = 0xFFFF  // Processor-specific
-} Elf64_EMachine;
-
-typedef enum {
-    PT_NULL = 0,            // Unused segment
-    PT_LOAD = 1,            // Loadable segment
-    PT_DYNAMIC = 2,         // Dynamic linking info
-    PT_INTERP = 3,          // Interpreter path
-    PT_NOTE = 4,            // Auxiliary info
-    PT_SHLIB = 5,           // Reserved
-    PT_PHDR = 6,            // Program header
-    PT_TLS = 7,             // Thread-local storage
-    PT_LOOS = 0x60000000,   // OS-specific
-    PT_HIOS = 0x6FFFFFFF,   // OS-specific
-    PT_LOPROC = 0x70000000, // Processor-specific
-    PT_HIPROC = 0x7FFFFFFF  // Processor-specific
-} Elf64_PType;
-
-typedef enum {
-    PF_X = 0x1, // Execute
-    PF_W = 0x2, // Write
-    PF_R = 0x4  // Read
-} Elf64_PFlags;
-
-typedef enum {
-    SHT_NULL = 0,     // Inactive
-    SHT_PROGBITS = 1, // Program data
-    SHT_SYMTAB = 2,   // Symbol table
-    SHT_STRTAB = 3,   // String table
-    SHT_RELA = 4,     // Relocations w/ addends
-    SHT_HASH = 5,     // Hash table
-    SHT_DYNAMIC = 6,  // Dynamic linking info
-    SHT_NOTE = 7,     // Notes
-    SHT_NOBITS = 8,   // Uninitialized data
-    SHT_REL = 9,      // Relocations w/o addends
-    SHT_DYNSYM = 11   // Dynamic symbol table
-} Elf64_ShType;
-
-typedef enum {
-    SHF_WRITE = 0x1,    // Writable
-    SHF_ALLOC = 0x2,    // Occupies memory
-    SHF_EXECINSTR = 0x4 // Executable
-} Elf64_ShFlags;
+// typedef enum {
+//     ET_NONE = 0,        // No file type
+//     ET_REL = 1,         // Relocatable file
+//     ET_EXEC = 2,        // Executable file
+//     ET_DYN = 3,         // Shared object file
+//     ET_CORE = 4,        // Core file
+//     ET_LOOS = 0xFE00,   // OS-specific
+//     ET_HIOS = 0xFEFF,   // OS-specific
+//     ET_LOPROC = 0xFF00, // Processor-specific
+//     ET_HIPROC = 0xFFFF  // Processor-specific
+// } Elf64_EType;
+// 
+// typedef enum {
+//     EM_NONE = 0,        // No machine
+//     EM_M32 = 1,         // AT&T WE 32100
+//     EM_SPARC = 2,       // SPARC
+//     EM_386 = 3,         // Intel 80386
+//     EM_68K = 4,         // Motorola 68000
+//     EM_88K = 5,         // Motorola 88000
+//     EM_IAMCU = 6,       // Intel MCU
+//     EM_860 = 7,         // Intel 80860
+//     EM_MIPS = 8,        // MIPS R3000
+//     EM_ARM = 40,        // ARM
+//     EM_X86_64 = 62,     // x86-64
+//     EM_AARCH64 = 183,   // ARM 64-bit
+//     EM_RISCV = 243,     // RISC-V
+//     EM_LOPROC = 0xFF00, // Processor-specific
+//     EM_HIPROC = 0xFFFF  // Processor-specific
+// } Elf64_EMachine;
+// 
+// typedef enum {
+//     PT_NULL = 0,            // Unused segment
+//     PT_LOAD = 1,            // Loadable segment
+//     PT_DYNAMIC = 2,         // Dynamic linking info
+//     PT_INTERP = 3,          // Interpreter path
+//     PT_NOTE = 4,            // Auxiliary info
+//     PT_SHLIB = 5,           // Reserved
+//     PT_PHDR = 6,            // Program header
+//     PT_TLS = 7,             // Thread-local storage
+//     PT_LOOS = 0x60000000,   // OS-specific
+//     PT_HIOS = 0x6FFFFFFF,   // OS-specific
+//     PT_LOPROC = 0x70000000, // Processor-specific
+//     PT_HIPROC = 0x7FFFFFFF  // Processor-specific
+// } Elf64_PType;
+// 
+// typedef enum {
+//     PF_X = 0x1, // Execute
+//     PF_W = 0x2, // Write
+//     PF_R = 0x4  // Read
+// } Elf64_PFlags;
+// 
+// typedef enum {
+//     SHT_NULL = 0,     // Inactive
+//     SHT_PROGBITS = 1, // Program data
+//     SHT_SYMTAB = 2,   // Symbol table
+//     SHT_STRTAB = 3,   // String table
+//     SHT_RELA = 4,     // Relocations w/ addends
+//     SHT_HASH = 5,     // Hash table
+//     SHT_DYNAMIC = 6,  // Dynamic linking info
+//     SHT_NOTE = 7,     // Notes
+//     SHT_NOBITS = 8,   // Uninitialized data
+//     SHT_REL = 9,      // Relocations w/o addends
+//     SHT_DYNSYM = 11   // Dynamic symbol table
+// } Elf64_ShType;
+// 
+// typedef enum {
+//     SHF_WRITE = 0x1,    // Writable
+//     SHF_ALLOC = 0x2,    // Occupies memory
+//     SHF_EXECINSTR = 0x4 // Executable
+// } Elf64_ShFlags;
 
 //////////////////////////////////////////////////////////////
 ///				32-BIT ELF HEADER
@@ -302,75 +302,75 @@ typedef struct {
 ///				32-BIT ENUMERATIONS
 //////////////////////////////////////////////////////////////
 
-typedef enum {
-    ET_NONE32 = 0,        // No file type
-    ET_REL32 = 1,         // Relocatable file
-    ET_EXEC32 = 2,        // Executable file
-    ET_DYN32 = 3,         // Shared object file
-    ET_CORE32 = 4,        // Core file
-    ET_LOOS32 = 0xFE00,   // OS-specific
-    ET_HIOS32 = 0xFEFF,   // OS-specific
-    ET_LOPROC32 = 0xFF00, // Processor-specific
-    ET_HIPROC32 = 0xFFFF  // Processor-specific
-} Elf32_EType;
-
-typedef enum {
-    EM_NONE32 = 0,        // No machine
-    EM_M3232 = 1,         // AT&T WE 32100
-    EM_SPARC32 = 2,       // SPARC
-    EM_38632 = 3,         // Intel 80386
-    EM_68K32 = 4,         // Motorola 68000
-    EM_88K32 = 5,         // Motorola 88000
-    EM_IAMCU32 = 6,       // Intel MCU
-    EM_86032 = 7,         // Intel 80860
-    EM_MIPS32 = 8,        // MIPS R3000
-    EM_ARM32 = 40,        // ARM
-    EM_386_32 = 3,        // Duplicate alias for 80386
-    EM_XTENSA32 = 18,     // Tensilica Xtensa
-    EM_LOPROC32 = 0xFF00, // Processor-specific
-    EM_HIPROC32 = 0xFFFF  // Processor-specific
-} Elf32_EMachine;
-
-typedef enum {
-    PT_NULL32 = 0,            // Unused segment
-    PT_LOAD32 = 1,            // Loadable segment
-    PT_DYNAMIC32 = 2,         // Dynamic linking info
-    PT_INTERP32 = 3,          // Interpreter path
-    PT_NOTE32 = 4,            // Auxiliary info
-    PT_SHLIB32 = 5,           // Reserved
-    PT_PHDR32 = 6,            // Program header
-    PT_TLS32 = 7,             // Thread-local storage
-    PT_LOOS32 = 0x60000000,   // OS-specific
-    PT_HIOS32 = 0x6FFFFFFF,   // OS-specific
-    PT_LOPROC32 = 0x70000000, // Processor-specific
-    PT_HIPROC32 = 0x7FFFFFFF  // Processor-specific
-} Elf32_PType;
-
-typedef enum {
-    PF_X32 = 0x1, // Execute
-    PF_W32 = 0x2, // Write
-    PF_R32 = 0x4  // Read
-} Elf32_PFlags;
-
-typedef enum {
-    SHT_NULL32 = 0,     // Inactive
-    SHT_PROGBITS32 = 1, // Program data
-    SHT_SYMTAB32 = 2,   // Symbol table
-    SHT_STRTAB32 = 3,   // String table
-    SHT_RELA32 = 4,     // Relocations w/ addends
-    SHT_HASH32 = 5,     // Hash table
-    SHT_DYNAMIC32 = 6,  // Dynamic linking info
-    SHT_NOTE32 = 7,     // Notes
-    SHT_NOBITS32 = 8,   // Uninitialized data
-    SHT_REL32 = 9,      // Relocations w/o addends
-    SHT_DYNSYM32 = 11   // Dynamic symbol table
-} Elf32_ShType;
-
-typedef enum {
-    SHF_WRITE32 = 0x1,    // Writable
-    SHF_ALLOC32 = 0x2,    // Occupies memory
-    SHF_EXECINSTR32 = 0x4 // Executable
-} Elf32_ShFlags;
+// typedef enum {
+//     ET_NONE32 = 0,        // No file type
+//     ET_REL32 = 1,         // Relocatable file
+//     ET_EXEC32 = 2,        // Executable file
+//     ET_DYN32 = 3,         // Shared object file
+//     ET_CORE32 = 4,        // Core file
+//     ET_LOOS32 = 0xFE00,   // OS-specific
+//     ET_HIOS32 = 0xFEFF,   // OS-specific
+//     ET_LOPROC32 = 0xFF00, // Processor-specific
+//     ET_HIPROC32 = 0xFFFF  // Processor-specific
+// } Elf32_EType;
+// 
+// typedef enum {
+//     EM_NONE32 = 0,        // No machine
+//     EM_M3232 = 1,         // AT&T WE 32100
+//     EM_SPARC32 = 2,       // SPARC
+//     EM_38632 = 3,         // Intel 80386
+//     EM_68K32 = 4,         // Motorola 68000
+//     EM_88K32 = 5,         // Motorola 88000
+//     EM_IAMCU32 = 6,       // Intel MCU
+//     EM_86032 = 7,         // Intel 80860
+//     EM_MIPS32 = 8,        // MIPS R3000
+//     EM_ARM32 = 40,        // ARM
+//     EM_386_32 = 3,        // Duplicate alias for 80386
+//     EM_XTENSA32 = 18,     // Tensilica Xtensa
+//     EM_LOPROC32 = 0xFF00, // Processor-specific
+//     EM_HIPROC32 = 0xFFFF  // Processor-specific
+// } Elf32_EMachine;
+// 
+// typedef enum {
+//     PT_NULL32 = 0,            // Unused segment
+//     PT_LOAD32 = 1,            // Loadable segment
+//     PT_DYNAMIC32 = 2,         // Dynamic linking info
+//     PT_INTERP32 = 3,          // Interpreter path
+//     PT_NOTE32 = 4,            // Auxiliary info
+//     PT_SHLIB32 = 5,           // Reserved
+//     PT_PHDR32 = 6,            // Program header
+//     PT_TLS32 = 7,             // Thread-local storage
+//     PT_LOOS32 = 0x60000000,   // OS-specific
+//     PT_HIOS32 = 0x6FFFFFFF,   // OS-specific
+//     PT_LOPROC32 = 0x70000000, // Processor-specific
+//     PT_HIPROC32 = 0x7FFFFFFF  // Processor-specific
+// } Elf32_PType;
+// 
+// typedef enum {
+//     PF_X32 = 0x1, // Execute
+//     PF_W32 = 0x2, // Write
+//     PF_R32 = 0x4  // Read
+// } Elf32_PFlags;
+// 
+// typedef enum {
+//     SHT_NULL32 = 0,     // Inactive
+//     SHT_PROGBITS32 = 1, // Program data
+//     SHT_SYMTAB32 = 2,   // Symbol table
+//     SHT_STRTAB32 = 3,   // String table
+//     SHT_RELA32 = 4,     // Relocations w/ addends
+//     SHT_HASH32 = 5,     // Hash table
+//     SHT_DYNAMIC32 = 6,  // Dynamic linking info
+//     SHT_NOTE32 = 7,     // Notes
+//     SHT_NOBITS32 = 8,   // Uninitialized data
+//     SHT_REL32 = 9,      // Relocations w/o addends
+//     SHT_DYNSYM32 = 11   // Dynamic symbol table
+// } Elf32_ShType;
+// 
+// typedef enum {
+//     SHF_WRITE32 = 0x1,    // Writable
+//     SHF_ALLOC32 = 0x2,    // Occupies memory
+//     SHF_EXECINSTR32 = 0x4 // Executable
+// } Elf32_ShFlags;
 
 //////////////////////////////////////////////////////////////
 ///					Dynamic Entries
@@ -392,32 +392,32 @@ typedef struct {
     } d_un;
 } Elf64_Dyn;
 
-typedef enum {
-    DT_NULL = 0,      // end of dynamic section
-    DT_NEEDED = 1,    // name of needed library
-    DT_PLTRELSZ = 2,  // size of PLT relocations
-    DT_PLTGOT = 3,    // address of PLT/GOT
-    DT_HASH = 4,      // address of symbol hash table
-    DT_STRTAB = 5,    // address of string table
-    DT_SYMTAB = 6,    // address of symbol table
-    DT_RELA = 7,      // address of Rela relocations
-    DT_RELASZ = 8,    // size of Rela relocations
-    DT_RELAENT = 9,   // size of one Rela relocation
-    DT_STRSZ = 10,    // size of string table
-    DT_SYMENT = 11,   // size of one symbol table entry
-    DT_INIT = 12,     // address of init function
-    DT_FINI = 13,     // address of fini function
-    DT_SONAME = 14,   // name of shared object
-    DT_RPATH = 15,    // library search path (deprecated)
-    DT_SYMBOLIC = 16, // start symbol search here
-    DT_REL = 17,      // address of Rel relocations
-    DT_RELSZ = 18,    // size of Rel relocations
-    DT_RELENT = 19,   // size of one Rel relocation
-    DT_PLTREL = 20,   // type of PLT relocation entries
-    DT_DEBUG = 21,    // unused, set to 0
-    DT_TEXTREL = 22,  // relocation might modify .text
-    DT_JMPREL = 23,   // address of PLT relocations
-} Elf_EDyn;
+// typedef enum {
+//     DT_NULL = 0,      // end of dynamic section
+//     DT_NEEDED = 1,    // name of needed library
+//     DT_PLTRELSZ = 2,  // size of PLT relocations
+//     DT_PLTGOT = 3,    // address of PLT/GOT
+//     DT_HASH = 4,      // address of symbol hash table
+//     DT_STRTAB = 5,    // address of string table
+//     DT_SYMTAB = 6,    // address of symbol table
+//     DT_RELA = 7,      // address of Rela relocations
+//     DT_RELASZ = 8,    // size of Rela relocations
+//     DT_RELAENT = 9,   // size of one Rela relocation
+//     DT_STRSZ = 10,    // size of string table
+//     DT_SYMENT = 11,   // size of one symbol table entry
+//     DT_INIT = 12,     // address of init function
+//     DT_FINI = 13,     // address of fini function
+//     DT_SONAME = 14,   // name of shared object
+//     DT_RPATH = 15,    // library search path (deprecated)
+//     DT_SYMBOLIC = 16, // start symbol search here
+//     DT_REL = 17,      // address of Rel relocations
+//     DT_RELSZ = 18,    // size of Rel relocations
+//     DT_RELENT = 19,   // size of one Rel relocation
+//     DT_PLTREL = 20,   // type of PLT relocation entries
+//     DT_DEBUG = 21,    // unused, set to 0
+//     DT_TEXTREL = 22,  // relocation might modify .text
+//     DT_JMPREL = 23,   // address of PLT relocations
+// } Elf_EDyn;
 
 //////////////////////////////////////////////////////////////
 ///					AUXV (env auxiliary)
